@@ -10,5 +10,9 @@
     "dev": "nodemon app.js"
   },
   "author": "Joshua James",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^6.5.0",
+    "mongoose": "^5.11.15"
+  }
 }
