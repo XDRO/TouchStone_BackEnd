@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
 
 userSchema.statics.findUserByCredentials = function findUserByCredentials(
   email,
-  password
+  password,
 ) {
   return this.findOne({ email })
     .select("+password")
@@ -48,6 +48,7 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(
         error.name = "INVALID_EMAIL_PASSWORD";
         return Promise.reject(error);
       }
+      // create error handler to compare password and confirmPassword
       // found
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
