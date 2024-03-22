@@ -1,15 +1,15 @@
 const bcrypt = require("bcryptjs");
 
-// const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 
 const user = require("../models/user");
 
 const { HttpBadRequest } = require("../utils/err/HttpBadRequest");
 // const { HttpNotFound } = require("../utils/err/HttpNotFound");
 const { HttpConflict } = require("../utils/err/HttpConflict");
-// const { HttpUnauthorized } = require("../utils/err/HttpUnauthorized");
+const { HttpUnauthorized } = require("../utils/err/HttpUnauthorized");
 
-// const { JWT_SECRET } = require("../utils/config");
+const { JWT_SECRET } = require("../utils/config");
 
 module.exports.createUser = async (req, res, next) => {
   try {
@@ -37,6 +37,25 @@ module.exports.createUser = async (req, res, next) => {
     }
     if (e.code === 11000) {
       return next(new HttpConflict("Duplicate email error"));
+    }
+    return next(e);
+  }
+};
+
+module.exports.login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const foundUser = await user.findUserByCredentials(email, password);
+
+    const token = jwt.sign({ _id: foundUser._id }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    return res.send({ token });
+  } catch (e) {
+    if (e.name === "INVALID_EMAIL_PASSWORD") {
+      return next(new HttpUnauthorized("Invalid email or password"));
     }
     return next(e);
   }
