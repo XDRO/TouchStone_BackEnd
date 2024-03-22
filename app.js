@@ -1,10 +1,11 @@
+/* eslint-disable no-console */
 const express = require("express");
 
 const mongoose = require("mongoose");
 
 const cors = require("cors");
 
-// const { globalErrorHandler } = require("./middlewares/error");
+const { globalErrorHandler } = require("./middlewares/error");
 
 // const { requestLogger, errorLogger } = require("./middlewares/logger");
 
@@ -34,5 +35,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use(routes, require("./routes/index"));
+
+app.use(globalErrorHandler);
 
 app.listen(PORT, () => {});
