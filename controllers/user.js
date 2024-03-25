@@ -76,3 +76,6 @@ module.exports.getUser = async (req, res, next) => {
     return next(e);
   }
 };
+
+// possibly add update user controller
+// if you decide to add an avatar
