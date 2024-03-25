@@ -19,6 +19,8 @@ router.post("/signup", createUser);
 
 router.get("/users/me", auth, getUser);
 
+// chat items routers
+
 router.use((req, res, next) => next(new HttpNotFound("Router not found")));
 
 module.exports = router;

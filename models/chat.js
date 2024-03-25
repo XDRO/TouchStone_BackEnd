@@ -3,15 +3,19 @@ const user = require("./user");
 
 const chatSchema = new mongoose.Schema({
   owner: {
-    type: mongoose.schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: user,
     required: true,
   },
-  object: {
+  message: {
+    type: String,
+    required: true,
+  },
+  response: {
     type: String,
   },
   createdAt: {
-    type: String,
+    type: Date,
     required: true,
     default: Date.now,
   },
