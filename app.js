@@ -11,7 +11,7 @@ const { globalErrorHandler } = require("./middlewares/error");
 
 // const { requestLogger, errorLogger } = require("./middlewares/logger");
 
-// require("dotenv").config();
+require("dotenv").config();
 
 const { PORT = 3001 } = process.env;
 

@@ -21,7 +21,7 @@ module.exports.validateUserInfoBody = celebrate({
     }),
     // work on password confirmation
     // confirmPassword: Joi.string().required().messages({
-    //   "string.empty": "Password field cannot be empty",
+    //   "string.empty": "Confirm password field cannot be empty",
     // }),
   }),
 });
@@ -49,7 +49,7 @@ module.exports.validateUserUpdateBody = celebrate({
 });
 
 module.exports.validateMessageBody = celebrate({
-  body: Joi.object.keys({
+  body: Joi.object().keys({
     message: Joi.string().required().min(1).max(100).messages({
       "string.min": 'The minimum length of the "message" field is 1 character',
       "string.max":
