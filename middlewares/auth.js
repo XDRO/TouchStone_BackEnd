@@ -4,7 +4,6 @@ const { HttpUnauthorized } = require("../utils/err/HttpUnauthorized");
 
 module.exports = async (req, res, next) => {
   const { authorization } = req.headers;
-  console.log(req.headers);
 
   if (!authorization || !authorization.startsWith("Bearer ")) {
     return next(new HttpUnauthorized("Authorization header is missing"));
