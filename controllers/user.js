@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const user = require("../models/user");
 
 const { HttpBadRequest } = require("../utils/err/HttpBadRequest");
-// const { HttpNotFound } = require("../utils/err/HttpNotFound");
+const { HttpNotFound } = require("../utils/err/HttpNotFound");
 const { HttpConflict } = require("../utils/err/HttpConflict");
 // const { HttpUnauthorized } = require("../utils/err/HttpUnauthorized");
 
@@ -57,6 +57,22 @@ module.exports.login = async (req, res, next) => {
     if (e.name === "INVALID_EMAIL_PASSWORD") {
       return next(new HttpBadRequest("Invalid email or password"));
     }
+    return next(e);
+  }
+};
+
+module.exports.getUser = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+
+    const userData = await user.findById(_id).orFail();
+
+    if (!userData) {
+      return next(new HttpNotFound("User not found"));
+    }
+
+    return res.json(userData);
+  } catch (e) {
     return next(e);
   }
 };
