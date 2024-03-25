@@ -7,7 +7,7 @@ const user = require("../models/user");
 const { HttpBadRequest } = require("../utils/err/HttpBadRequest");
 // const { HttpNotFound } = require("../utils/err/HttpNotFound");
 const { HttpConflict } = require("../utils/err/HttpConflict");
-const { HttpUnauthorized } = require("../utils/err/HttpUnauthorized");
+// const { HttpUnauthorized } = require("../utils/err/HttpUnauthorized");
 
 const { JWT_SECRET } = require("../utils/config");
 
@@ -55,7 +55,7 @@ module.exports.login = async (req, res, next) => {
     return res.send({ token });
   } catch (e) {
     if (e.name === "INVALID_EMAIL_PASSWORD") {
-      return next(new HttpUnauthorized("Invalid email or password"));
+      return next(new HttpBadRequest("Invalid email or password"));
     }
     return next(e);
   }
