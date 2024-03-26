@@ -1,6 +1,6 @@
 // const mongoose = require("mongoose");
 const { HttpBadRequest } = require("../utils/err/HttpBadRequest");
-const chat = require("../models/chat");
+const chat = require("../models/message");
 
 module.exports.generateResponse = async (req, res, next) => {
   try {

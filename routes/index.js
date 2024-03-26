@@ -17,7 +17,7 @@ const {
 
 const { createUser, login, getUser } = require("../controllers/user");
 
-const { generateResponse, getChatHistory } = require("../controllers/chat");
+const { generateResponse, getChatHistory } = require("../controllers/message");
 
 router.post("/signup", validateNewUserInfo, createUser);
 
@@ -26,6 +26,7 @@ router.post("/signin", validateUserLogin, login);
 router.get("/users/me", auth, getUser);
 
 // chat items routers
+// refactor this
 
 router.post("/items", auth, generateResponse);
 
