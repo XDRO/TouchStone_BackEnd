@@ -7,11 +7,11 @@ const auth = require("../middlewares/auth");
 // come back to later
 // add to respective routes
 
-const {
-  validateUserInfoBody, // createuser
-  validateUserLogin, //login
-  validateMessageBody, //generateResponse
-} = require("../middlewares/joivalidation");
+// const {
+//   validateUserInfoBody, // createuser
+//   validateUserLogin, //login
+//   validateMessageBody, //generateResponse
+// } = require("../middlewares/joivalidation");
 
 const { createUser, login, getUser } = require("../controllers/user");
 
