@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 
 const cors = require("cors");
 
+const { errors } = require("celebrate");
+
 const { globalErrorHandler } = require("./middlewares/error");
 
 // const { requestLogger, errorLogger } = require("./middlewares/logger");
@@ -35,6 +37,8 @@ app.use(express.json());
 app.use(cors());
 
 app.use(routes, require("./routes/index"));
+
+app.use(errors());
 
 app.use(globalErrorHandler);
 
