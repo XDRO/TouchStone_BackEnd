@@ -1,10 +1,16 @@
 const mongoose = require("mongoose");
 const user = require("./user");
+const message = require("./message");
 
 const responseSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: user,
+    required: true,
+  },
+  message: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: message,
     required: true,
   },
   response: {
@@ -27,3 +33,5 @@ const responseSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+module.exports = mongoose.model("response", responseSchema);
