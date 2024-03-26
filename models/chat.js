@@ -12,7 +12,18 @@ const chatSchema = new mongoose.Schema({
     required: true,
   },
   response: {
-    type: String,
+    choices: [
+      {
+        text: {
+          type: String,
+          required: true,
+        },
+        finish_reason: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   createdAt: {
     type: Date,

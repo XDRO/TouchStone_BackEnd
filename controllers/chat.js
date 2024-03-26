@@ -6,6 +6,7 @@ module.exports.generateResponse = async (req, res, next) => {
   try {
     const { message, response, createdAt } = req.body;
     const owner = req.user._id;
+    console.log(response);
 
     const newChat = await chat.create({
       owner,
@@ -25,7 +26,7 @@ module.exports.generateResponse = async (req, res, next) => {
     return res.send(responseData);
   } catch (e) {
     if (e.name === "ValidationError") {
-      return next(new HttpBadRequest("ValidationError"));
+      return next(new HttpBadRequest("ValidationError", e.message));
     }
     return next(e);
   }
