@@ -13,14 +13,14 @@ const { JWT_SECRET } = require("../utils/config");
 
 module.exports.createUser = async (req, res, next) => {
   try {
-    const { name, email, password, confirmPassword } = req.body;
+    const { name, email, password, confirm_password } = req.body;
     const hash = bcrypt.hashSync(password, 10);
 
     const newUser = await user.create({
       name,
       email,
       password: hash,
-      confirmPassword,
+      confirm_password,
     });
 
     const resData = {

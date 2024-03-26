@@ -13,7 +13,10 @@ const auth = require("../middlewares/auth");
 //   validateMessageBody, //generateResponse
 // } = require("../middlewares/joivalidation");
 
-const { validateNewUserInfo } = require("../middlewares/joivalidation");
+const {
+  validateNewUserInfo,
+  validateUserLogin,
+} = require("../middlewares/joivalidation");
 
 const { createUser, login, getUser } = require("../controllers/user");
 
@@ -21,7 +24,7 @@ const { generateResponse, getChatHistory } = require("../controllers/chat");
 
 router.post("/signup", validateNewUserInfo, createUser);
 
-router.post("/signin", login);
+router.post("/signin", validateUserLogin, login);
 
 router.get("/users/me", auth, getUser);
 
