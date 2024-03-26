@@ -4,7 +4,7 @@ module.exports.validateNewUserInfo = (req, res, next) => {
   try {
     celebrate({
       body: Joi.object({
-        name: Joi.string().max(30).min(2).required().label("name").messages({
+        name: Joi.string().min(2).max(30).required().label("name").messages({
           "string.min":
             "The minimum length of the '{#label}' field is 2 characters",
           "string.max":
@@ -35,7 +35,6 @@ module.exports.validateNewUserInfo = (req, res, next) => {
             "any.required": " '{#label}' field is required",
             "any.only": " '{#label} field must match the password field",
           }),
-        // access_token: Joi.alternatives().try(Joi.string(), Joi.number()),
       }),
     })(req, res, next);
   } catch (e) {
