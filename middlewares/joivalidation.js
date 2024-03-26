@@ -69,3 +69,21 @@ module.exports.validateUserLogin = (req, res, next) => {
     next(e);
   }
 };
+
+// begin working on validating responses, also think about creating seperate
+// validation for messages
+
+// module.exports.validateResponse = (req, res, next) => {
+//   try {
+//     celebrate({
+//       body: Joi.object({
+//         message: Joi.string().required().label("message").messages({
+//           "any.required": " '{#label}' field is required for response",
+//         }),
+//         response: Joi.string().required(),
+//       }),
+//     })(req, res, next);
+//   } catch (e) {
+//     next(e);
+//   }
+// };

@@ -4,9 +4,6 @@ const { HttpNotFound } = require("../utils/err/HttpNotFound");
 
 const auth = require("../middlewares/auth");
 
-// come back to later
-// add to respective routes
-
 // const {
 //   validateUserInfoBody, // createuser
 //   validateUserLogin, //login
