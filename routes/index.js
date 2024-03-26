@@ -17,7 +17,7 @@ const {
 
 const { createUser, login, getUser } = require("../controllers/user");
 
-const { generateResponse, getChatHistory } = require("../controllers/message");
+// const { generateResponse, getChatHistory } = require("../controllers/message");
 
 router.post("/signup", validateNewUserInfo, createUser);
 
@@ -28,9 +28,9 @@ router.get("/users/me", auth, getUser);
 // chat items routers
 // refactor this
 
-router.post("/items", auth, generateResponse);
+// router.post("/items", auth, generateResponse);
 
-router.get("/items", getChatHistory);
+// router.get("/items", getChatHistory);
 
 router.use((req, res, next) => next(new HttpNotFound("Router not found")));
 
