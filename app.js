@@ -3,8 +3,6 @@ const express = require("express");
 
 const mongoose = require("mongoose");
 
-const OpenAI = require("openai");
-
 const cors = require("cors");
 
 const { globalErrorHandler } = require("./middlewares/error");
