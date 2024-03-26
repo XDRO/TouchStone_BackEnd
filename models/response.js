@@ -34,4 +34,4 @@ const responseSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("response", responseSchema);
+module.exports = mongoose.model("responseChat", responseSchema);

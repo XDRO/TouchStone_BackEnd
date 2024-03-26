@@ -1,5 +1,5 @@
 const { HttpBadRequest } = require("../utils/err/HttpBadRequest");
-const response = require("../models/response");
+const responseChat = require("../models/response");
 
 module.exports.generateResponse = async (req, res, next) => {
   try {
@@ -10,7 +10,7 @@ module.exports.generateResponse = async (req, res, next) => {
     console.log(message);
     console.log(response);
 
-    const newResponse = await response.create({
+    const newResponse = await responseChat.create({
       owner,
       response,
       createdAt,
