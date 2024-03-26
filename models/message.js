@@ -11,20 +11,6 @@ const messageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  response: {
-    choices: [
-      {
-        text: {
-          type: String,
-          required: true,
-        },
-        finish_reason: {
-          type: String,
-          required: true,
-        },
-      },
-    ],
-  },
   createdAt: {
     type: Date,
     required: true,
