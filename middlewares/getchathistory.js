@@ -12,11 +12,11 @@ const getResponseHistory = () => {
 module.exports.getChatHistory = async (req, res, next) => {
   // wrap async ops in promises
   try {
-    const [messages, response] = await Promise.all([
+    const [messages, responses] = await Promise.all([
       getMessageHistory(),
       getResponseHistory(),
     ]);
-    const chatHistory = { messages, response };
+    const chatHistory = { messages, responses };
     res.send(chatHistory);
   } catch (e) {
     next(e);
