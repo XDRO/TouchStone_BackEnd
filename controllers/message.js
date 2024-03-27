@@ -1,43 +1,32 @@
 // const mongoose = require("mongoose");
 const { HttpBadRequest } = require("../utils/err/HttpBadRequest");
-const chat = require("../models/message");
+const messageChat = require("../models/message");
 
-// module.exports.generateResponse = async (req, res, next) => {
-//   try {
-//     const { message, response, createdAt } = req.body;
-//     const owner = req.user._id;
-//     console.log(response);
-
-//     const newChat = await chat.create({
-//       owner,
-//       message,
-//       response,
-//       createdAt,
-//     });
-
-//     const responseData = {
-//       _id: newChat._id,
-//       message: newChat.message,
-//       response: newChat.response,
-//       createdAt: newChat.createdAt,
-//       owner: newChat.owner,
-//     };
-
-//     return res.send(responseData);
-//   } catch (e) {
-//     if (e.name === "ValidationError") {
-//       return next(new HttpBadRequest("ValidationError", e.message));
-//     }
-//     return next(e);
-//   }
-// };
-
-module.exports.getChatHistory = async (req, res, next) => {
+module.exports.userMessage = async (req, res, next) => {
   try {
-    const chatHistory = await chat.find({});
-    return res.status(200).send(chatHistory);
+    const { message, createdAt } = req.body;
+    const owner = req.user._id;
+
+    const newMessage = await messageChat.create({
+      owner,
+      message,
+      createdAt,
+    });
+
+    const messageData = {
+      _id: newMessage._id,
+      message: newMessage.message,
+      createdAt: newMessage.createdAt,
+      owner: newMessage.owner,
+    };
+
+    return res.send(messageData);
   } catch (e) {
-    return next(e);
+    // console.error(e.message);
+    // console.log(req.body);
+    // console.log(req.headers);
+    // // console.log(res.json());
+    return next(new HttpBadRequest(e.message));
   }
 };
 

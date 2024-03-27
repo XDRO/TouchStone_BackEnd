@@ -5,8 +5,6 @@ const { HttpNotFound } = require("../utils/err/HttpNotFound");
 const auth = require("../middlewares/auth");
 
 // const {
-//   validateUserInfoBody, // createuser
-//   validateUserLogin, //login
 //   validateMessageBody, //generateResponse
 // } = require("../middlewares/joivalidation");
 
@@ -17,7 +15,9 @@ const {
 
 const { createUser, login, getUser } = require("../controllers/user");
 
-// const { generateResponse, getChatHistory } = require("../controllers/message");
+const { userMessage } = require("../controllers/message");
+
+const { generateResponse } = require("../controllers/response");
 
 router.post("/signup", validateNewUserInfo, createUser);
 
@@ -27,8 +27,9 @@ router.get("/users/me", auth, getUser);
 
 // chat items routers
 // refactor this
+router.post("/items", auth, userMessage);
 
-// router.post("/items", auth, generateResponse);
+router.post("/items", auth, generateResponse);
 
 // router.get("/items", getChatHistory);
 
