@@ -1,13 +1,14 @@
 const { HttpBadRequest } = require("../utils/err/HttpBadRequest");
-// const message = require("../models/message");
 const responseChat = require("../models/response");
+
+// I may need to potentially ref this line below somehow
+// const messageChat = require("../models/message");
+// const messageData = await messageChat.findById(newResponse.message._id);
 
 module.exports.generateResponse = async (req, res, next) => {
   try {
     const { response, createdAt } = req.body;
     const owner = req.user._id;
-    // figure out what to do with message
-    console.log(response);
 
     const newResponse = await responseChat.create({
       owner,
@@ -16,12 +17,12 @@ module.exports.generateResponse = async (req, res, next) => {
     });
 
     const responseData = {
-      _id: newResponse._id,
+      responseId: newResponse._id,
       response: newResponse.response,
       createdAt: newResponse.createdAt,
       owner: newResponse.owner,
     };
-
+    console.log(messageData);
     return res.send(responseData);
   } catch (e) {
     if (e.name === "ValidationError") {
@@ -30,42 +31,3 @@ module.exports.generateResponse = async (req, res, next) => {
     return next(e);
   }
 };
-
-// module.exports.generateResponse = async (req, res, next) => {
-//   try {
-//     const { message, response, createdAt } = req.body;
-//     const owner = req.user._id;
-//     console.log(response);
-
-//     const newChat = await chat.create({
-//       owner,
-//       message,
-//       response,
-//       createdAt,
-//     });
-
-//     const responseData = {
-//       _id: newChat._id,
-//       message: newChat.message,
-//       response: newChat.response,
-//       createdAt: newChat.createdAt,
-//       owner: newChat.owner,
-//     };
-
-//     return res.send(responseData);
-//   } catch (e) {
-//     if (e.name === "ValidationError") {
-//       return next(new HttpBadRequest("ValidationError", e.message));
-//     }
-//     return next(e);
-//   }
-// };
-
-// module.exports.getChatHistory = async (req, res, next) => {
-//   try {
-//     const chatHistory = await chat.find({});
-//     return res.status(200).send(chatHistory);
-//   } catch (e) {
-//     return next(e);
-//   }
-// };

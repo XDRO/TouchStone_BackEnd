@@ -22,10 +22,6 @@ module.exports.userMessage = async (req, res, next) => {
 
     return res.send(messageData);
   } catch (e) {
-    // console.error(e.message);
-    // console.log(req.body);
-    // console.log(req.headers);
-    // // console.log(res.json());
     return next(new HttpBadRequest(e.message));
   }
 };
