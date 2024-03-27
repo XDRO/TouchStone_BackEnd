@@ -17,17 +17,27 @@ module.exports.generateResponse = async (req, res, next) => {
     });
 
     const responseData = {
-      responseId: newResponse._id,
+      _id: newResponse._id,
       response: newResponse.response,
       createdAt: newResponse.createdAt,
       owner: newResponse.owner,
     };
-    console.log(messageData);
+    console.log(response);
     return res.send(responseData);
   } catch (e) {
     if (e.name === "ValidationError") {
       return next(new HttpBadRequest("ValidationError", e.message));
     }
+    return next(e);
+  }
+};
+
+module.exports.getResponseHistory = async (req, res, next) => {
+  try {
+    const responseHistory = await responseChat.find({});
+    console.log("response");
+    return res.status(200).send(responseHistory);
+  } catch (e) {
     return next(e);
   }
 };
