@@ -11,6 +11,8 @@ const auth = require("../middlewares/auth");
 const {
   validateNewUserInfo,
   validateUserLogin,
+  validateChat,
+  // validateResponse,
 } = require("../middlewares/joivalidation");
 
 const { createUser, login, getUser } = require("../controllers/user");
@@ -27,9 +29,9 @@ router.get("/users/me", auth, getUser);
 
 // chat items routers
 // refactor this
-router.post("/items", auth, userMessage);
+router.post("/items", auth, validateChat, userMessage);
 
-router.post("/items", auth, generateResponse);
+router.post("/items", auth, validateChat, generateResponse);
 
 // router.get("/items", getChatHistory);
 
