@@ -41,7 +41,7 @@ router.get("/items", getMessageHistory);
 
 // chat response routers
 
-router.post("/response", auth, generateResponse);
+router.post("/response", auth, validateChat, generateResponse);
 
 // create middleware for this
 

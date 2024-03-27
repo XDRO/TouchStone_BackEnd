@@ -3,7 +3,6 @@ const responseChat = require("../models/response");
 
 // I may need to potentially ref this line below somehow
 // const messageChat = require("../models/message");
-// const messageData = await messageChat.findById(newResponse.message._id);
 
 module.exports.generateResponse = async (req, res, next) => {
   try {
@@ -16,7 +15,11 @@ module.exports.generateResponse = async (req, res, next) => {
       createdAt,
     });
 
+    // const messageData = await messageChat.findById(newResponse.message._id);
+
     const responseData = {
+      // messageid: messageData._id,
+      // message: messageData.message,
       _id: newResponse._id,
       response: newResponse.response,
       createdAt: newResponse.createdAt,
@@ -25,6 +28,7 @@ module.exports.generateResponse = async (req, res, next) => {
     return res.send(responseData);
   } catch (e) {
     if (e.name === "ValidationError") {
+      console.error(e.message);
       return next(new HttpBadRequest("ValidationError", e.message));
     }
     return next(e);
