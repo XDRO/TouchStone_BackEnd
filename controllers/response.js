@@ -25,6 +25,7 @@ module.exports.generateResponse = async (req, res, next) => {
       createdAt: newResponse.createdAt,
       owner: newResponse.owner,
     };
+    console.log(responseData);
     return res.send(responseData);
   } catch (e) {
     if (e.name === "ValidationError") {
