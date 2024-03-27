@@ -28,13 +28,3 @@ module.exports.userMessage = async (req, res, next) => {
 
 // delete item controller
 // and possibly like and dislike controllers
-
-module.exports.getMessageHistory = async (req, res, next) => {
-  try {
-    const messageHistory = await messageChat.find({});
-    console.log(messageHistory);
-    return res.status(200).send(messageHistory);
-  } catch (e) {
-    return next(e);
-  }
-};

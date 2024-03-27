@@ -17,12 +17,11 @@ const {
 
 const { createUser, login, getUser } = require("../controllers/user");
 
-const { userMessage, getMessageHistory } = require("../controllers/message");
+const { userMessage } = require("../controllers/message");
 
-const {
-  generateResponse,
-  getResponseHistory,
-} = require("../controllers/response");
+const { generateResponse } = require("../controllers/response");
+
+const { getChatHistory } = require("../middlewares/getchathistory");
 
 router.post("/signup", validateNewUserInfo, createUser);
 
@@ -37,7 +36,7 @@ router.post("/items", auth, validateChat, userMessage);
 router.post("/items", auth, validateChat, generateResponse);
 
 // create middleware for this
-router.get("/items", getMessageHistory, getResponseHistory);
+router.get("/items", getChatHistory);
 
 router.use((req, res, next) => next(new HttpNotFound("Router not found")));
 
