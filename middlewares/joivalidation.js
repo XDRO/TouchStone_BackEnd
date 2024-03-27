@@ -70,7 +70,7 @@ module.exports.validateUserLogin = (req, res, next) => {
   }
 };
 
-module.exports.validateChat = (req, res, next) => {
+module.exports.validateMessage = (req, res, next) => {
   try {
     celebrate({
       body: Joi.object().keys({

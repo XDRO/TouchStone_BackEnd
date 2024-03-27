@@ -11,7 +11,7 @@ const auth = require("../middlewares/auth");
 const {
   validateNewUserInfo,
   validateUserLogin,
-  validateChat,
+  validateMessage,
   // validateResponse,
 } = require("../middlewares/joivalidation");
 
@@ -35,13 +35,13 @@ router.get("/users/me", auth, getUser);
 
 // chat items routers
 // refactor this
-router.post("/items", auth, validateChat, userMessage);
+router.post("/items", auth, validateMessage, userMessage);
 
 router.get("/items", getMessageHistory);
 
 // chat response routers
 
-router.post("/response", auth, validateChat, generateResponse);
+router.post("/response", auth, generateResponse);
 
 // create middleware for this
 
