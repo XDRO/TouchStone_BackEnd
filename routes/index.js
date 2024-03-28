@@ -24,9 +24,6 @@ const {
   getResponseHistory,
 } = require("../controllers/response");
 
-// gets both response and message
-// const { getChatHistory } = require("../middlewares/getchathistory");
-
 router.post("/signup", validateNewUserInfo, createUser);
 
 router.post("/signin", validateUserLogin, login);
@@ -42,6 +39,8 @@ router.get("/items", getMessageHistory);
 // chat response routers
 
 router.post("/response", auth, generateResponse);
+
+router.get("/response", getResponseHistory);
 
 // create middleware for this
 
