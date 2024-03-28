@@ -4,15 +4,11 @@ const { HttpNotFound } = require("../utils/err/HttpNotFound");
 
 const auth = require("../middlewares/auth");
 
-// const {
-//   validateMessageBody, //generateResponse
-// } = require("../middlewares/joivalidation");
-
 const {
   validateNewUserInfo,
   validateUserLogin,
   validateMessage,
-  // validateResponse,
+  validateResponse,
 } = require("../middlewares/joivalidation");
 
 const { createUser, login, getUser } = require("../controllers/user");
@@ -31,18 +27,14 @@ router.post("/signin", validateUserLogin, login);
 router.get("/users/me", auth, getUser);
 
 // chat items routers
-// refactor this
 router.post("/items", auth, validateMessage, userMessage);
 
 router.get("/items", getMessageHistory);
 
 // chat response routers
-
-router.post("/response", auth, generateResponse);
+router.post("/response", auth, validateResponse, generateResponse);
 
 router.get("/response", getResponseHistory);
-
-// create middleware for this
 
 router.use((req, res, next) => next(new HttpNotFound("Router not found")));
 

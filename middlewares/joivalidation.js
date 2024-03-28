@@ -77,6 +77,17 @@ module.exports.validateMessage = (req, res, next) => {
         message: Joi.string().required().label("message").messages({
           "any.required": " '{#label}' field is required for response",
         }),
+      }),
+    })(req, res, next);
+  } catch (e) {
+    next(e);
+  }
+};
+
+module.exports.validateResponse = (req, res, next) => {
+  try {
+    celebrate({
+      body: Joi.object().keys({
         response: Joi.string().required().label("response").messages({
           "any.required":
             " '{#label}' an error occured when generating a response",
