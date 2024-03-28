@@ -31,7 +31,8 @@ module.exports.getMessageHistory = async (req, res, next) => {
     const messageHistory = await messageChat.find({});
     return res.status(200).send(messageHistory);
   } catch (e) {
-    return next(e);
+    // return next(new HttpBadRequest(e.message));
+    console.log(e);
   }
 };
 

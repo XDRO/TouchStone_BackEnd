@@ -2,8 +2,7 @@ const { HttpBadRequest } = require("../utils/err/HttpBadRequest");
 const responseChat = require("../models/response");
 
 // I may need to potentially ref this line below somehow
-// const messageChat = require("../models/message");
-const { getMessageHistory } = require("../controllers/message");
+const messageChat = require("../models/message");
 
 module.exports.generateResponse = async (req, res, next) => {
   try {
@@ -16,8 +15,8 @@ module.exports.generateResponse = async (req, res, next) => {
       createdAt,
     });
 
-    const message = await getMessageHistory();
-    console.log(message);
+    const messages = await messageChat.find({});
+    console.log(messages);
 
     const responseData = {
       _id: newResponse._id,
@@ -26,7 +25,7 @@ module.exports.generateResponse = async (req, res, next) => {
       createdAt: newResponse.createdAt,
       owner: newResponse.owner,
     };
-    console.log(responseData);
+    // console.log(responseData);
     return res.send(responseData);
   } catch (e) {
     if (e.name === "ValidationError") {
