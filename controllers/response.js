@@ -1,10 +1,10 @@
 const { HttpBadRequest } = require("../utils/err/HttpBadRequest");
 const responseChat = require("../models/response");
-
-// I may need to potentially ref this line below somehow
 const messageChat = require("../models/message");
 
 module.exports.generateResponse = async (req, res, next) => {
+  // await a users message here, when they add a message
+  // generate a response
   try {
     const { response, createdAt } = req.body;
     const messages = await messageChat.find({});
@@ -57,30 +57,3 @@ module.exports.getResponseHistory = async (req, res, next) => {
     return next(e);
   }
 };
-
-// removed from responseData
-// messageid: messageData._id,
-// message: messageData.message,
-
-//  removed from generate response
-// accessess the message owner by index
-// if (messages[0].owner === responseData.owner) {
-//   consolelog("success");
-//   return res.send(responseData);
-// } else {
-//   console.log("message", messages[0].owner);
-//   console.log("response owner", responseData.owner);
-//   return res.send("Couldn't find a message that equals the response");
-// }
-
-// iterates over the messages variable to return data
-// messages.forEach((message) => {
-//   if (message.owner.toJSON() === responseData.owner.toJSON()) {
-//     console.log("success");
-//     return res.send(responseData);
-//   } else {
-//     console.log("message owner:", message.owner);
-//     console.log("response owner:", responseData.owner);
-//     return res.send("fail");
-//   }
-// });
