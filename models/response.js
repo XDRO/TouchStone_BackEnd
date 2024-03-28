@@ -15,7 +15,7 @@ const responseSchema = new mongoose.Schema({
   },
   response: {
     type: String,
-    // ref: message,
+    ref: message,
   },
   createdAt: {
     type: Date,
