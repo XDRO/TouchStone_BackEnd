@@ -25,14 +25,21 @@ module.exports.generateResponse = async (req, res, next) => {
       owner: newResponse.owner,
     };
 
+    let ownerMatchFound = false;
+
     messages.forEach((message) => {
-      if (message.owner.toJSON() === responseData.owner.toJSON()) {
-        console.log("success");
-        return res.send(responseData);
+      if (message.owner.equals(responseData.owner)) {
+        ownerMatchFound = true;
       } else {
-        return res.send("fail");
+        return next(e);
       }
     });
+
+    if (ownerMatchFound) {
+      return res.send(responseData);
+    } else {
+      return next(e);
+    }
   } catch (e) {
     if (e.name === "ValidationError") {
       console.error(e.message);
