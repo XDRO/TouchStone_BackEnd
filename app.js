@@ -10,7 +10,7 @@ const { errors } = require("celebrate");
 
 const { globalErrorHandler } = require("./middlewares/error");
 
-// const { requestLogger, errorLogger } = require("./middlewares/logger");
+const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 require("dotenv").config();
 
@@ -37,7 +37,11 @@ app.use(express.json());
 
 app.use(cors());
 
+app.use(requestLogger);
+
 app.use(routes, require("./routes/index"));
+
+app.use(errorLogger);
 
 app.use(errors());
 
