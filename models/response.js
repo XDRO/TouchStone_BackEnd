@@ -8,11 +8,6 @@ const responseSchema = new mongoose.Schema({
     ref: user,
     required: true,
   },
-  message: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: message,
-    // required: true,
-  },
   response: {
     type: String,
     ref: message,
