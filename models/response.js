@@ -14,18 +14,8 @@ const responseSchema = new mongoose.Schema({
     // required: true,
   },
   response: {
-    choices: [
-      {
-        text: {
-          type: String,
-          required: true,
-        },
-        finish_reason: {
-          type: String,
-          required: true,
-        },
-      },
-    ],
+    type: String,
+    // ref: message,
   },
   createdAt: {
     type: Date,
@@ -35,3 +25,17 @@ const responseSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("responseChat", responseSchema);
+
+// removed from response
+// choices: [
+//   {
+//     text: {
+//       type: String,
+//       required: true,
+//     },
+//     finish_reason: {
+//       type: String,
+//       required: true,
+//     },
+//   },
+// ],

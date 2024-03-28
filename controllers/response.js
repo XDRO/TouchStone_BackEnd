@@ -3,6 +3,7 @@ const responseChat = require("../models/response");
 
 // I may need to potentially ref this line below somehow
 // const messageChat = require("../models/message");
+const { getMessageHistory } = require("../controllers/message");
 
 module.exports.generateResponse = async (req, res, next) => {
   try {
@@ -15,13 +16,13 @@ module.exports.generateResponse = async (req, res, next) => {
       createdAt,
     });
 
-    // const messageData = await messageChat.findById(newResponse.message._id);
+    const message = await getMessageHistory();
+    console.log(message);
 
     const responseData = {
-      // messageid: messageData._id,
-      // message: messageData.message,
       _id: newResponse._id,
       response: newResponse.response,
+      message: newResponse.message,
       createdAt: newResponse.createdAt,
       owner: newResponse.owner,
     };
@@ -44,3 +45,7 @@ module.exports.getResponseHistory = async (req, res, next) => {
     return next(e);
   }
 };
+
+// removed from responseData
+// messageid: messageData._id,
+// message: messageData.message,
