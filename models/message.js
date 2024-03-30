@@ -19,17 +19,3 @@ const messageSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("messageChat", messageSchema);
-
-// removed from response
-// choices: [
-//   {
-//     text: {
-//       type: String,
-//       required: true,
-//     },
-//     finish_reason: {
-//       type: String,
-//       required: true,
-//     },
-//   },
-// ],
