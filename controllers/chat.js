@@ -21,14 +21,12 @@ const chat = require("../models/chat");
 
 module.exports.userMessage = async (req, res, next) => {
   try {
-    const { createdAt } = req.body;
     const owner = req.user._id;
 
     const newMessage = await chat.create({
       owner,
       text: "fake user message",
       chatType: "message",
-      createdAt,
     });
 
     const messageData = {
@@ -49,7 +47,6 @@ module.exports.generateResponse = async (req, res, next) => {
   // await a users message here, when they add a message
   // generate a response
   try {
-    const { createdAt } = req.body;
     const messages = await chat.find({});
     const owner = req.user._id;
 
@@ -57,7 +54,6 @@ module.exports.generateResponse = async (req, res, next) => {
       owner,
       text: "fake chatGpt response",
       chatType: "response",
-      createdAt,
     });
 
     const responseData = {
