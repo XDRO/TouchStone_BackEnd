@@ -25,11 +25,13 @@ router.post("/signin", validateUserLogin, login);
 
 router.get("/users/me", auth, getUser);
 
-router.post("/message", auth, validateMessage, userMessage);
+// validateMessage removed from userMessage route
+router.post("/message", auth, userMessage);
 
 router.get("/message", getHistory);
 
-router.post("/response", auth, validateResponse, generateResponse);
+// validateResponse removed from generateResponse route
+router.post("/response", auth, generateResponse);
 
 router.use((req, res, next) => next(new HttpNotFound("Router not found")));
 

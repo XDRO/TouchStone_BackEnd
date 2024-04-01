@@ -12,11 +12,7 @@ const chatSchema = new mongoose.Schema({
     enum: ["message", "response"],
     required: true,
   },
-  response: {
-    type: String,
-    required: true,
-  },
-  message: {
+  text: {
     type: String,
     required: true,
   },
@@ -28,17 +24,3 @@ const chatSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("chat", chatSchema);
-
-// removed from response
-// choices: [
-//   {
-//     text: {
-//       type: String,
-//       required: true,
-//     },
-//     finish_reason: {
-//       type: String,
-//       required: true,
-//     },
-//   },
-// ],
