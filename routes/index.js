@@ -17,6 +17,7 @@ const {
   userMessage,
   generateResponse,
   getHistory,
+  deleteChat,
 } = require("../controllers/chat");
 
 router.post("/signup", validateNewUserInfo, createUser);
@@ -32,6 +33,9 @@ router.get("/message", getHistory);
 
 // validateResponse removed from generateResponse route
 router.post("/response", auth, generateResponse);
+
+// delete
+router.delete("/message/:messageId", deleteChat);
 
 router.use((req, res, next) => next(new HttpNotFound("Router not found")));
 
