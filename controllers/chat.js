@@ -103,9 +103,23 @@ module.exports.getHistory = async (req, res, next) => {
 // Add delete items controller
 module.exports.deleteChat = async (req, res, next) => {
   try {
-    const { _id } = req.params;
-    const userChat = await chat.findById({ _id });
-    console.log(userChat);
+    const { messageId } = req.params; // undefined
+    const reqUser = req.user._id; // undefined
+    const userChat = await chat.findById(messageId);
+
+    if (userChat === null) {
+      return next(new HttpNotFound("chat not found"));
+    }
+
+    const { owner } = userChat;
+
+    if (!owner.equals(reqUser)) {
+      return next(new HttpUnauthorized("Not Authorized"));
+    }
+
+    await chat.deleteOne({ _id: messageId });
+
+    return res.status(200).json({ message: "Chat deleted" });
   } catch (e) {
     if (e.name === "CastError") {
       return next(new HttpBadRequest(e.message));
@@ -113,29 +127,3 @@ module.exports.deleteChat = async (req, res, next) => {
     return next(e);
   }
 };
-
-// removed from deleteChat
-// try {
-//   const { messageId } = req.params;
-//   // const reqUser = req.user._id; // undefined
-//   const userChat = await chat.findById({ _id: messageId });
-
-//   if (userChat === null) {
-//     return next(new HttpNotFound("chat not found"));
-//   }
-
-//   const { owner } = userChat;
-
-//   if (!owner.equals(reqUser)) {
-//     return next(new HttpUnauthorized("Not Authorized"));
-//   }
-
-//   await chat.deleteOne({ _id: messageId });
-
-//   return res.status(200).json({ message: "Chat deleted" });
-// } catch (e) {
-//   if (e.name === "CastError") {
-//     return next(new HttpBadRequest("Cast Error"), console.log(messageId));
-//   }
-//   return next(e);
-// }
