@@ -7,8 +7,6 @@ const auth = require("../middlewares/auth");
 const {
   validateNewUserInfo,
   validateUserLogin,
-  validateMessage,
-  validateResponse,
 } = require("../middlewares/joivalidation");
 
 const { createUser, login, getUser } = require("../controllers/user");
