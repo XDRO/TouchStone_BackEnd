@@ -2,24 +2,27 @@ const { HttpBadRequest } = require("../utils/err/HttpBadRequest");
 const { HttpNotFound } = require("../utils/err/HttpNotFound");
 const { HttpUnauthorized } = require("../utils/err/HttpUnauthorized");
 const chat = require("../models/chat");
+// import openai from "../utils/open-ai"; // video version
+const { openai } = require("../utils/open-ai");
 
-// import { Configuration, OpenAIApi } from "openai";
-
-// const configuration = new Configuration({
-//   apikey: process.env.OPEN_AI_KEY,
+// const chatCompletion = await openai.chat.completions.create({
+//   model: "gpt-3.5-turbo",
+//   messages: [{ role: "user", content: "Hello!" }],
 // });
+// console.log(chatCompletion.choices[0].message);
 
-// const openai = new OpenAIApi(configuration);
-
-// async function main() {
-//   const chatCompletion = await openai.createChatCompletion({
-//     model: "gpt-3.5-turbo",
-//     messages: [{ role: "user", content: "What is the capital of Georgia" }],
-//   });
-//   console.log(chatCompletion.data.choices[0].message.content);
-// }
-
-// main();
+module.exports.chatCompletion = async (req, res, next) => {
+  try {
+    const complete = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: "Hello!" }],
+    });
+    console.log(complete);
+    return res.status(200).send(complete);
+  } catch (e) {
+    return next(e);
+  }
+};
 
 module.exports.userMessage = async (req, res, next) => {
   try {
