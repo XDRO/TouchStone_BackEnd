@@ -35,7 +35,7 @@ router.get("/message", getHistory);
 router.post("/response", auth, generateResponse);
 
 // delete
-router.delete("/message/:messageId", deleteChat);
+router.delete("/message/:messageId", auth, deleteChat);
 
 router.use((req, res, next) => next(new HttpNotFound("Router not found")));
 

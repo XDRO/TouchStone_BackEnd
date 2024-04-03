@@ -103,8 +103,8 @@ module.exports.getHistory = async (req, res, next) => {
 // Add delete items controller
 module.exports.deleteChat = async (req, res, next) => {
   try {
-    const { messageId } = req.params; // undefined
-    const reqUser = req.user._id; // undefined
+    const { messageId } = req.params;
+    const reqUser = req.user._id;
     const userChat = await chat.findById(messageId);
 
     if (userChat === null) {
@@ -121,6 +121,7 @@ module.exports.deleteChat = async (req, res, next) => {
 
     return res.status(200).json({ message: "Chat deleted" });
   } catch (e) {
+    console.error(e);
     if (e.name === "CastError") {
       return next(new HttpBadRequest(e.message));
     }
