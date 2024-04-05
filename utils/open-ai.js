@@ -1,16 +1,12 @@
 const OpenAI = require("openai");
-<<<<<<< HEAD
 const readlineSync = require("readline-sync");
 const colors = require("colors");
 const { HttpBadRequest } = require("./err/HttpBadRequest");
 
-=======
->>>>>>> 1130afc093e4b547d7d23084b84afa763e3ba9be
 const openai = new OpenAI({
   apiKey: process.env.OPEN_AI_KEY,
 });
 
-<<<<<<< HEAD
 async function chat(req, res, next) {
   console.log(colors.bold.green(`Welcome to TouchStone, powered by openai`));
   console.log(colors.bold.green(`Start a chat with TouchStone`));
@@ -40,19 +36,3 @@ async function chat(req, res, next) {
 }
 
 chat();
-=======
-// // const { Configuration } = require("openai");
-// const { OpenAIApi } = require("openai");
-// const dotenv = require("dotenv");
-// dotenv.config();
-
-// // const configuration = new Configuration({
-// //   apikey: process.env.OPEN_AI_KEY,
-// // });
-
-// const openai = new OpenAIApi({
-//   apikey: process.env.OPEN_AI_KEY,
-// });
-
-module.exports = { openai };
->>>>>>> 1130afc093e4b547d7d23084b84afa763e3ba9be
