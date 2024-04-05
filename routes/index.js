@@ -7,13 +7,12 @@ const auth = require("../middlewares/auth");
 const {
   validateNewUserInfo,
   validateUserLogin,
-  validateMessage,
-  validateResponse,
 } = require("../middlewares/joivalidation");
 
 const { createUser, login, getUser } = require("../controllers/user");
 
 const {
+  chatCompletion,
   userMessage,
   generateResponse,
   getHistory,
@@ -36,6 +35,8 @@ router.post("/response", auth, generateResponse);
 
 // delete
 router.delete("/message/:messageId", auth, deleteChat);
+
+router.post("/complete", chatCompletion);
 
 router.use((req, res, next) => next(new HttpNotFound("Router not found")));
 

@@ -1,25 +1,9 @@
 const { HttpBadRequest } = require("../utils/err/HttpBadRequest");
 const { HttpNotFound } = require("../utils/err/HttpNotFound");
 const { HttpUnauthorized } = require("../utils/err/HttpUnauthorized");
+// moved this to open-ai folder to figure out
+// const { openai } = require("../utils/open-ai");
 const chat = require("../models/chat");
-
-// import { Configuration, OpenAIApi } from "openai";
-
-// const configuration = new Configuration({
-//   apikey: process.env.OPEN_AI_KEY,
-// });
-
-// const openai = new OpenAIApi(configuration);
-
-// async function main() {
-//   const chatCompletion = await openai.createChatCompletion({
-//     model: "gpt-3.5-turbo",
-//     messages: [{ role: "user", content: "What is the capital of Georgia" }],
-//   });
-//   console.log(chatCompletion.data.choices[0].message.content);
-// }
-
-// main();
 
 module.exports.userMessage = async (req, res, next) => {
   try {
