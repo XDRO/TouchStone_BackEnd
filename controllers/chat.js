@@ -4,7 +4,31 @@ const { HttpUnauthorized } = require("../utils/err/HttpUnauthorized");
 // moved this to open-ai folder to figure out
 // const { openai } = require("../utils/open-ai");
 const chat = require("../models/chat");
+// import openai from "../utils/open-ai"; // video version
+const { openai } = require("../utils/open-ai");
 
+<<<<<<< HEAD
+=======
+// const chatCompletion = await openai.chat.completions.create({
+//   model: "gpt-3.5-turbo",
+//   messages: [{ role: "user", content: "Hello!" }],
+// });
+// console.log(chatCompletion.choices[0].message);
+
+module.exports.chatCompletion = async (req, res, next) => {
+  try {
+    const complete = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: "Hello!" }],
+    });
+    console.log(complete);
+    return res.status(200).send(complete);
+  } catch (e) {
+    return next(e);
+  }
+};
+
+>>>>>>> 1130afc093e4b547d7d23084b84afa763e3ba9be
 module.exports.userMessage = async (req, res, next) => {
   try {
     const owner = req.user._id;
