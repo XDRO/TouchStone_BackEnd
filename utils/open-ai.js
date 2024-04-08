@@ -1,7 +1,6 @@
 const OpenAI = require("openai");
 const readlineSync = require("readline-sync");
 const colors = require("colors");
-// const { HttpBadRequest } = require("./err/HttpBadRequest");
 require("dotenv").config();
 
 const openai = new OpenAI({
