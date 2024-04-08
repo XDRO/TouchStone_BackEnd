@@ -2,6 +2,7 @@ const OpenAI = require("openai");
 const readlineSync = require("readline-sync");
 const colors = require("colors");
 const { HttpBadRequest } = require("./err/HttpBadRequest");
+require("dotenv").config();
 
 const openai = new OpenAI({
   apiKey: process.env.OPEN_AI_KEY,
@@ -11,17 +12,27 @@ async function chat(req, res, next) {
   console.log(colors.bold.green(`Welcome to TouchStone, powered by openai`));
   console.log(colors.bold.green(`Start a chat with TouchStone`));
 
+  const chatHistory = []; // store
+
   while (true) {
     const userInput = readlineSync.question(colors.yellow("You: "));
     try {
+      // Construct messages by iterating over the history
+      const messages = chatHistory.map(([role, content]) => ({
+        role,
+        content,
+      }));
+
+      // add lastest user input
+      // removed from messages: [{ role: "user", content: messages }],
+      messages.push({ role: "user", content: userInput });
       // call the API with the user input
       const completion = await openai.chat.completions.create({
         model: "gpt-3.5-turbo-0125",
-        messages: [{ role: "user", content: userInput }],
+        messages: messages,
       });
 
       // get complettion text/content
-      console.log(completion.choices[0].message.content);
       const completionText = completion.choices[0].message.content;
 
       if (userInput.toLowerCase() === "exit") {
@@ -29,6 +40,10 @@ async function chat(req, res, next) {
       }
 
       console.log(colors.green("Bot: " + completionText));
+
+      // Update history with user input and assistant response
+      chatHistory.push(["user", userInput]);
+      chatHistory.push(["assistant", completionText]);
     } catch (error) {
       console.error(colors.red(error));
     }
