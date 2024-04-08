@@ -2,10 +2,9 @@ const { HttpBadRequest } = require("../utils/err/HttpBadRequest");
 const { HttpNotFound } = require("../utils/err/HttpNotFound");
 const { HttpUnauthorized } = require("../utils/err/HttpUnauthorized");
 // moved this to open-ai folder to figure out
-// const { openai } = require("../utils/open-ai");
+
 const chat = require("../models/chat");
 // import openai from "../utils/open-ai"; // video version
-const { openai } = require("../utils/open-ai");
 
 module.exports.userMessage = async (req, res, next) => {
   try {
