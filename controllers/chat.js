@@ -44,7 +44,6 @@ module.exports.generateResponse = async (req, res, next) => {
     const lastestUserMessage = await chat.findOne({}).sort({ createdAt: -1 });
 
     if (!lastestUserMessage) {
-      console.log(lastestUserMessage);
       return next(new HttpNotFound("No user message found"));
     }
 
