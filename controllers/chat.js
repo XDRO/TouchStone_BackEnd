@@ -1,18 +1,24 @@
+const OpenAI = require("openai");
+const readlineSync = require("readline-sync");
+const colors = require("colors");
+require("dotenv").config();
 const { HttpBadRequest } = require("../utils/err/HttpBadRequest");
 const { HttpNotFound } = require("../utils/err/HttpNotFound");
 const { HttpUnauthorized } = require("../utils/err/HttpUnauthorized");
 
 const chat = require("../models/chat");
 
+const openai = new OpenAI({
+  apiKey: process.env.OPEN_AI_KEY,
+});
+
 module.exports.userMessage = async (req, res, next) => {
   try {
     const owner = req.user._id;
     const { text } = req.body;
-    // console.log("this is the log: ", text);
 
     const newMessage = await chat.create({
       owner,
-      // text: "fake user message",
       text,
       chatType: "message",
     });
@@ -32,15 +38,35 @@ module.exports.userMessage = async (req, res, next) => {
 };
 
 module.exports.generateResponse = async (req, res, next) => {
-  // await a users message here, when they add a message
-  // generate a response
   try {
-    const messages = await chat.find({});
     const owner = req.user._id;
+
+    const lastestUserMessage = await chat.findOne({}).sort({ createdAt: -1 });
+
+    if (!lastestUserMessage) {
+      console.log(lastestUserMessage);
+      return next(new HttpNotFound("No user message found"));
+    }
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo-0125",
+      messages: [
+        {
+          role: "user",
+          content: lastestUserMessage.text,
+        },
+        {
+          role: "assistant",
+          content: "fake chatGpt response",
+        },
+      ],
+    });
+
+    const completionText = completion.choices[0].message.content;
 
     const newResponse = await chat.create({
       owner,
-      text: "fake chatGpt response",
+      text: completionText,
       chatType: "response",
     });
 
@@ -54,7 +80,9 @@ module.exports.generateResponse = async (req, res, next) => {
 
     let ownerMatchFound = false;
 
-    messages.forEach((message) => {
+    const eachMessage = await chat.find({});
+
+    eachMessage.forEach((message) => {
       if (message.owner.equals(responseData.owner)) {
         ownerMatchFound = true;
       } else {
@@ -65,6 +93,7 @@ module.exports.generateResponse = async (req, res, next) => {
     if (ownerMatchFound) {
       return res.send(responseData);
     }
+
     return next(e);
   } catch (e) {
     if (e.name === "ValidationError") {
