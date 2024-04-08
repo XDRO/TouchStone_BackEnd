@@ -24,8 +24,8 @@ async function chat(req, res, next) {
       }));
 
       // add lastest user input
-      // removed from messages: [{ role: "user", content: messages }],
       messages.push({ role: "user", content: userInput });
+
       // call the API with the user input
       const completion = await openai.chat.completions.create({
         model: "gpt-3.5-turbo-0125",
