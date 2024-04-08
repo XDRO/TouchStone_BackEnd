@@ -106,7 +106,6 @@ module.exports.generateResponse = async (req, res, next) => {
 module.exports.getHistory = async (req, res, next) => {
   try {
     const history = await chat.find({});
-    console.log(history);
     return res.status(200).send(history);
   } catch (e) {
     return next(e);

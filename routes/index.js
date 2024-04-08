@@ -30,6 +30,7 @@ router.post("/message", auth, userMessage);
 router.get("/message", getHistory);
 
 // validateResponse removed from generateResponse route
+
 router.post("/response", auth, generateResponse);
 
 // delete
