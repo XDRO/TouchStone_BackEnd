@@ -71,3 +71,17 @@ module.exports.validateUserLogin = (req, res, next) => {
 };
 
 // add fields to validate user texts, and responses
+module.exports.validateUserMessage = (req, res, next) => {
+  try {
+    celebrate({
+      body: Joi.object().keys({
+        text: Joi.string()
+          .label("message")
+          .messages({ "any.required": "'{#label}' field is required" }),
+        chatType: Joi.string().label("message"),
+      }),
+    })(req, res, next);
+  } catch (e) {
+    next(e);
+  }
+};

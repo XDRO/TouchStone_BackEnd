@@ -7,6 +7,7 @@ const auth = require("../middlewares/auth");
 const {
   validateNewUserInfo,
   validateUserLogin,
+  validateUserMessage,
 } = require("../middlewares/joivalidation");
 
 const { createUser, login, getUser } = require("../controllers/user");
@@ -25,12 +26,11 @@ router.post("/signin", validateUserLogin, login);
 router.get("/users/me", auth, getUser);
 
 // validateMessage removed from userMessage route
-router.post("/message", auth, userMessage);
+router.post("/message", auth, validateUserMessage, userMessage);
 
 router.get("/message", getHistory);
 
 // validateResponse removed from generateResponse route
-
 router.post("/response", auth, generateResponse);
 
 // delete
