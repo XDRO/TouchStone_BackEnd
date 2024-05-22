@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 
 const user = require("../models/user");
 
+const path = require("path");
+
 console.log(path.resolve(__dirname, "../utils/err/HttpBadRequest"));
 const { HttpBadRequest } = require(
   path.resolve(__dirname, "../utils/err/HttpBadRequest"),
