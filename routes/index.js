@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const { HttpNotFound } = require("../utils/err/HttpNotFound");
+const { HttpNotFound } = require("../utils/err/httpnotfound");
 
 const auth = require("../middlewares/auth");
 

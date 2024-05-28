@@ -1,7 +1,7 @@
 const OpenAI = require("openai");
-const { HttpBadRequest } = require("../utils/err/HttpBadRequest");
-const { HttpNotFound } = require("../utils/err/HttpNotFound");
-const { HttpUnauthorized } = require("../utils/err/HttpUnauthorized");
+const { HttpBadRequest } = require("../utils/err/httpbadrequest");
+const { HttpNotFound } = require("../utils/err/httpnotfound");
+const { HttpUnauthorized } = require("../utils/err/httpunauthorized");
 
 const chat = require("../models/chat");
 

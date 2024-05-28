@@ -4,9 +4,9 @@ const jwt = require("jsonwebtoken");
 
 const user = require("../models/user");
 
-const { HttpBadRequest } = require("../utils/err/HttpBadRequest");
-const { HttpNotFound } = require("../utils/err/HttpNotFound");
-const { HttpConflict } = require("../utils/err/HttpConflict");
+const { HttpBadRequest } = require("../utils/err/httpbadrequest");
+const { HttpNotFound } = require("../utils/err/httpnotfound");
+const { HttpConflict } = require("../utils/err/httpconflict");
 // const { HttpUnauthorized } = require("../utils/err/HttpUnauthorized");
 
 const { JWT_SECRET } = require("../utils/config");
