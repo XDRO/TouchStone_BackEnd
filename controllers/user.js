@@ -7,7 +7,7 @@ const user = require("../models/user");
 const { HttpBadRequest } = require("../utils/err/httpbadrequest");
 const { HttpNotFound } = require("../utils/err/httpnotfound");
 const { HttpConflict } = require("../utils/err/httpconflict");
-// const { HttpUnauthorized } = require("../utils/err/HttpUnauthorized");
+const { HttpUnauthorized } = require("../utils/err/httpunauthorized");
 
 const { JWT_SECRET } = require("../utils/config");
 
