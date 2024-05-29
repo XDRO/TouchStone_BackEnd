@@ -6,7 +6,7 @@ const { HttpUnauthorized } = require("../utils/err/httpunauthorized");
 const chat = require("../models/chat");
 
 const openai = new OpenAI({
-  apiKey: process.env.OPEN_AI_KEY,
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 module.exports.userMessage = async (req, res, next) => {

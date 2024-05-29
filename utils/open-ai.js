@@ -4,7 +4,7 @@ const colors = require("colors");
 require("dotenv").config();
 
 const openai = new OpenAI({
-  apiKey: process.env.OPEN_AI_KEY,
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 async function chat(req, res, next) {
