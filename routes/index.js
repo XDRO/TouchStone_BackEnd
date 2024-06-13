@@ -17,6 +17,7 @@ const {
   generateResponse,
   getHistory,
   deleteChat,
+  summarizer,
 } = require("../controllers/chat");
 
 router.post("/signup", validateNewUserInfo, createUser);
@@ -33,6 +34,7 @@ router.get("/message", getHistory);
 // validateResponse removed from generateResponse route
 router.post("/response", auth, generateResponse);
 
+router.post("/summarizer", summarizer);
 // delete
 router.delete("/message/:messageId", auth, deleteChat);
 

@@ -100,6 +100,35 @@ module.exports.generateResponse = async (req, res, next) => {
   }
 };
 
+module.exports.summarizer = async (req, res, next) => {
+  try {
+    const latestUserMessage = await chat.findOne({}).sort({ createdAt: -1 });
+
+    if (!latestUserMessage) {
+      return next(new HttpNotFound("No user message was found"));
+    }
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo-0301",
+      messages: [
+        {
+          role: "user",
+          content: `Summarize the following text: ${latestUserMessage.text}`,
+        },
+      ],
+      max_tokens: 50,
+      temperature: 0.5,
+    });
+
+    const summary = response.choices[0].message.content.trim();
+
+    return res.status(200).send({ summary });
+  } catch (e) {
+    console.log(e.message);
+    return next(e);
+  }
+};
+
 // get the chat history down here
 module.exports.getHistory = async (req, res, next) => {
   try {
