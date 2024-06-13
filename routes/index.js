@@ -34,7 +34,8 @@ router.get("/message", getHistory);
 // validateResponse removed from generateResponse route
 router.post("/response", auth, generateResponse);
 
-router.post("/summarizer", summarizer);
+// use later
+// router.post("/summarizer", summarizer);
 // delete
 router.delete("/message/:messageId", auth, deleteChat);
 
