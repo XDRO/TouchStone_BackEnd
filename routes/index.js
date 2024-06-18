@@ -18,9 +18,10 @@ const {
   getHistory,
   deleteChat,
   // summarizer,
+  // createThread,
 } = require("../controllers/chat");
 
-const { createThread } = require("../controllers/thread");
+// const {  } = require("../controllers/thread");
 
 router.post("/signup", validateNewUserInfo, createUser);
 
@@ -37,7 +38,8 @@ router.get("/message", getHistory);
 router.post("/response", auth, generateResponse);
 
 // create thread
-router.post("/threads", createThread);
+// router.post("/threads", createThread);
+
 // use later
 // router.post("/summarizer", summarizer);
 // delete
