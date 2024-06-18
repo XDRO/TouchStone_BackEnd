@@ -45,7 +45,7 @@ module.exports.generateResponse = async (req, res, next) => {
     }
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo-0125",
+      model: "gpt-4o",
       messages: [
         {
           role: "user",

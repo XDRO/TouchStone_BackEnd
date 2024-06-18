@@ -37,7 +37,7 @@ router.get("/message", getHistory);
 router.post("/response", auth, generateResponse);
 
 // create thread
-router.post("/threads", auth, createThread);
+router.post("/threads", createThread);
 // use later
 // router.post("/summarizer", summarizer);
 // delete

@@ -1,15 +1,62 @@
 const OpenAI = require("openai");
-const thread = require("../models/thread");
-const { userMessage, generateResponse } = require("./chat");
 const { HttpBadRequest } = require("../utils/err/httpbadrequest");
 const { HttpNotFound } = require("../utils/err/httpnotfound");
+const fs = require("fs");
+const path = require("path");
+
+const { userMessage, generateResponse } = require("./chat");
+
+const thread = require("../models/thread");
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+// const file = await openai.files.create({
+//   file: fs.createReadStream("revenue-forecast.csv"),
+//   purpose: "assistants",
+// });
+
+const uploadfile = async () => {
+  try {
+    const filePath = path.resolve(__dirname, "./chat.js");
+
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`File not found: ${filePath}`);
+    }
+
+    const fileResponse = await openai.files.create({
+      file: fs.createReadStream(filePath),
+      purpose: "assistants",
+    });
+    return fileResponse;
+  } catch (e) {
+    throw new Error(`File upload failed: ${e.message}`);
+  }
+};
 
 module.exports.createThread = async (req, res, next) => {
   try {
-    const { owner } = req.user._id;
+    const owner = req.user;
     const { messages, metadata, tool_resources } = req.body;
+    const fileResponse = await uploadfile();
+    const fileId = fileResponse.id;
 
-    let threadData = messages || [];
+    let threadData = await openai.beta.threads.create({
+      messages: [
+        {
+          role: "user",
+          content:
+            "Create 3 data visualizations based on the trends in this file.",
+          attachments: [
+            {
+              files: [fileId],
+              tools: [{ type: "code_interpreter" }],
+            },
+          ],
+        },
+      ],
+    });
 
     const userMessageData = await userMessage(req.body, owner);
     threadData.push(userMessageData);
