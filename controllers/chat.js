@@ -2,22 +2,25 @@ const OpenAI = require("openai");
 const { HttpBadRequest } = require("../utils/err/httpbadrequest");
 const { HttpNotFound } = require("../utils/err/httpnotfound");
 const { HttpUnauthorized } = require("../utils/err/httpunauthorized");
-
 const chat = require("../models/chat");
+const { v4: uuidv4 } = require("uuid");
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+const uniqueId = uuidv4();
+
 module.exports.userMessage = async (req, res, next) => {
   try {
     const owner = req.user._id;
-    const { text } = req.body;
+    const { text, chatId } = req.body;
 
     const newMessage = await chat.create({
       owner,
       text,
       chatType: "message",
+      chatId: uniqueId,
     });
 
     const messageData = {
@@ -26,6 +29,7 @@ module.exports.userMessage = async (req, res, next) => {
       owner: newMessage.owner,
       chatType: newMessage.chatType,
       createdAt: newMessage.createdAt,
+      chatId: newMessage.chatId,
     };
 
     return res.send(messageData);
@@ -37,6 +41,7 @@ module.exports.userMessage = async (req, res, next) => {
 module.exports.generateResponse = async (req, res, next) => {
   try {
     const owner = req.user._id;
+    const { chatId } = req.body;
 
     const lastestUserMessage = await chat.findOne({}).sort({ createdAt: -1 });
 
@@ -64,6 +69,7 @@ module.exports.generateResponse = async (req, res, next) => {
       owner,
       text: completionText,
       chatType: "response",
+      chatId: uniqueId,
     });
 
     const responseData = {
@@ -72,6 +78,7 @@ module.exports.generateResponse = async (req, res, next) => {
       owner: newResponse.owner,
       chatType: newResponse.chatType,
       createdAt: newResponse.createdAt,
+      chatId: newResponse.chatId,
     };
 
     let ownerMatchFound = false;

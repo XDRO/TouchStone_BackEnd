@@ -12,6 +12,10 @@ const chatSchema = new mongoose.Schema({
     enum: ["message", "response"],
     required: true,
   },
+  chatId: {
+    type: String,
+    required: true,
+  },
   text: {
     type: String,
     required: true,
