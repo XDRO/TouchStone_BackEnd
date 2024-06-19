@@ -9,18 +9,17 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const uniqueId = uuidv4();
-
 module.exports.userMessage = async (req, res, next) => {
   try {
     const owner = req.user._id;
-    const { text, chatId } = req.body;
+    const { text } = req.body;
+    const pairId = uuidv4();
 
     const newMessage = await chat.create({
       owner,
       text,
       chatType: "message",
-      chatId: uniqueId,
+      chatId: pairId,
     });
 
     const messageData = {
@@ -41,7 +40,6 @@ module.exports.userMessage = async (req, res, next) => {
 module.exports.generateResponse = async (req, res, next) => {
   try {
     const owner = req.user._id;
-    const { chatId } = req.body;
 
     const lastestUserMessage = await chat.findOne({}).sort({ createdAt: -1 });
 
@@ -69,7 +67,7 @@ module.exports.generateResponse = async (req, res, next) => {
       owner,
       text: completionText,
       chatType: "response",
-      chatId: uniqueId,
+      chatId: lastestUserMessage.chatId,
     });
 
     const responseData = {
