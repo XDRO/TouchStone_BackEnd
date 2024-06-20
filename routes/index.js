@@ -14,7 +14,7 @@ const { createUser, login, getUser } = require("../controllers/user");
 
 const {
   userMessage,
-  generateResponse,
+  // generateResponse,
   getHistory,
   deleteChat,
   // summarizer,
@@ -30,12 +30,12 @@ router.post("/signin", validateUserLogin, login);
 router.get("/users/me", auth, getUser);
 
 // validateMessage removed from userMessage route
-router.post("/message", auth, validateUserMessage, userMessage);
+router.post("/message", auth, userMessage);
 
 router.get("/message", getHistory);
 
 // validateResponse removed from generateResponse route
-router.post("/response", auth, generateResponse);
+// router.post("/response", auth, generateResponse);
 
 // create thread
 // router.post("/threads", createThread);

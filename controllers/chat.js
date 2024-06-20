@@ -15,18 +15,35 @@ module.exports.userMessage = async (req, res, next) => {
     const { text } = req.body;
     const pairId = uuidv4();
 
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        {
+          role: "user",
+          content: text,
+        },
+      ],
+    });
+
+    const completionText = completion.choices[0].message.content;
+    // newChat.messages[0].response = completionText;
+    // await newChat.save();
+
     const newMessage = await chat.create({
       owner,
-      text,
-      chatType: "message",
       chatId: pairId,
+      messages: [
+        {
+          message: text,
+          response: completionText,
+        },
+      ],
     });
 
     const messageData = {
       _id: newMessage._id,
-      text: newMessage.text,
       owner: newMessage.owner,
-      chatType: newMessage.chatType,
+      messages: newMessage.messages,
       createdAt: newMessage.createdAt,
       chatId: newMessage.chatId,
     };
@@ -37,73 +54,73 @@ module.exports.userMessage = async (req, res, next) => {
   }
 };
 
-module.exports.generateResponse = async (req, res, next) => {
-  try {
-    const owner = req.user._id;
+// module.exports.generateResponse = async (req, res, next) => {
+//   try {
+//     const owner = req.user._id;
 
-    const lastestUserMessage = await chat.findOne({}).sort({ createdAt: -1 });
+//     const lastestUserMessage = await chat.findOne({}).sort({ createdAt: -1 });
 
-    if (!lastestUserMessage) {
-      return next(new HttpNotFound("No user message found"));
-    }
+//     if (!lastestUserMessage) {
+//       return next(new HttpNotFound("No user message found"));
+//     }
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "user",
-          content: lastestUserMessage.text,
-        },
-        {
-          role: "assistant",
-          content: "fake chatGpt response",
-        },
-      ],
-    });
+//     const completion = await openai.chat.completions.create({
+//       model: "gpt-4o",
+//       messages: [
+//         {
+//           role: "user",
+//           content: lastestUserMessage.text,
+//         },
+//         {
+//           role: "assistant",
+//           content: "fake chatGpt response",
+//         },
+//       ],
+//     });
 
-    const completionText = completion.choices[0].message.content;
+//     const completionText = completion.choices[0].message.content;
 
-    const newResponse = await chat.create({
-      owner,
-      text: completionText,
-      chatType: "response",
-      chatId: lastestUserMessage.chatId,
-    });
+//     const newResponse = await chat.create({
+//       owner,
+//       text: completionText,
+//       chatType: "response",
+//       chatId: lastestUserMessage.chatId,
+//     });
 
-    const responseData = {
-      _id: newResponse._id,
-      text: newResponse.text,
-      owner: newResponse.owner,
-      chatType: newResponse.chatType,
-      createdAt: newResponse.createdAt,
-      chatId: newResponse.chatId,
-    };
+//     const responseData = {
+//       _id: newResponse._id,
+//       text: newResponse.text,
+//       owner: newResponse.owner,
+//       chatType: newResponse.chatType,
+//       createdAt: newResponse.createdAt,
+//       chatId: newResponse.chatId,
+//     };
 
-    let ownerMatchFound = false;
+//     let ownerMatchFound = false;
 
-    const eachMessage = await chat.find({});
+//     const eachMessage = await chat.find({});
 
-    eachMessage.forEach((message) => {
-      if (message.owner.equals(responseData.owner)) {
-        ownerMatchFound = true;
-      } else {
-        return next(e);
-      }
-    });
+//     eachMessage.forEach((message) => {
+//       if (message.owner.equals(responseData.owner)) {
+//         ownerMatchFound = true;
+//       } else {
+//         return next(e);
+//       }
+//     });
 
-    if (ownerMatchFound) {
-      return res.send(responseData);
-    }
+//     if (ownerMatchFound) {
+//       return res.send(responseData);
+//     }
 
-    return next(e);
-  } catch (e) {
-    if (e.name === "ValidationError") {
-      return next(new HttpBadRequest(e.message));
-    }
-    console.log("err at catch");
-    return next(e);
-  }
-};
+//     return next(e);
+//   } catch (e) {
+//     if (e.name === "ValidationError") {
+//       return next(new HttpBadRequest(e.message));
+//     }
+//     console.log("err at catch");
+//     return next(e);
+//   }
+// };
 
 // come back to later
 // this function will be used to summarize the users text, instead of using
