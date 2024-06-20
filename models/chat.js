@@ -19,10 +19,10 @@ const chatSchema = new mongoose.Schema({
     required: true,
   },
   messages: [messagesSchema],
-  chatId: {
-    type: String,
-    required: true,
-  },
+  // chatId: {
+  //   type: String,
+  //   required: true,
+  // },
   createdAt: {
     type: Date,
     required: true,
