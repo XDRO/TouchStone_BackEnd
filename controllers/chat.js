@@ -3,7 +3,6 @@ const { HttpBadRequest } = require("../utils/err/httpbadrequest");
 const { HttpNotFound } = require("../utils/err/httpnotfound");
 const { HttpUnauthorized } = require("../utils/err/httpunauthorized");
 const chat = require("../models/chat");
-// const { v4: uuidv4 } = require("uuid");
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -13,7 +12,6 @@ module.exports.userMessage = async (req, res, next) => {
   try {
     const owner = req.user._id;
     const { text } = req.body;
-    // const pairId = uuidv4();
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4",
@@ -26,12 +24,9 @@ module.exports.userMessage = async (req, res, next) => {
     });
 
     const completionText = completion.choices[0].message.content;
-    // newChat.messages[0].response = completionText;
-    // await newChat.save();
 
     const newMessage = await chat.create({
       owner,
-      // chatId: pairId,
       messages: [
         {
           message: text,
