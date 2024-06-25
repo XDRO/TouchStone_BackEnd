@@ -14,14 +14,10 @@ const { createUser, login, getUser } = require("../controllers/user");
 
 const {
   userMessage,
-  // generateResponse,
   getHistory,
   deleteChat,
-  // summarizer,
-  // createThread,
+  addMessageToChat,
 } = require("../controllers/chat");
-
-// const {  } = require("../controllers/thread");
 
 router.post("/signup", validateNewUserInfo, createUser);
 
@@ -34,16 +30,9 @@ router.post("/message", auth, userMessage);
 
 router.get("/message", getHistory);
 
-// validateResponse removed from generateResponse route
-// router.post("/response", auth, generateResponse);
-
-// create thread
-// router.post("/threads", createThread);
-
-// use later
-// router.post("/summarizer", summarizer);
+router.put("/message/:messageId", addMessageToChat);
 // delete
-router.delete("/message/:messageId", auth, deleteChat);
+// router.delete("/message/:messageId", auth, deleteChat);
 
 router.use((req, res, next) => next(new HttpNotFound("Router not found")));
 

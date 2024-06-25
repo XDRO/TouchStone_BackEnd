@@ -2,6 +2,7 @@ const OpenAI = require("openai");
 const { HttpBadRequest } = require("../utils/err/httpbadrequest");
 const { HttpNotFound } = require("../utils/err/httpnotfound");
 const { HttpUnauthorized } = require("../utils/err/httpunauthorized");
+const mongoose = require("mongoose");
 const chat = require("../models/chat");
 
 const openai = new OpenAI({
@@ -156,6 +157,38 @@ module.exports.getHistory = async (req, res, next) => {
     const history = await chat.find({});
     return res.status(200).send(history);
   } catch (e) {
+    return next(e);
+  }
+};
+
+module.exports.addMessageToChat = async (req, res, next) => {
+  try {
+    const { messageId } = req.params;
+
+    if (!messageId) {
+      console.log("messageId not found");
+      return next(new HttpBadRequest("messageId not found"));
+    }
+
+    const userChat = await chat
+      .findByIdAndUpdate(
+        messageId,
+        { $addToSet: { messages: req.user._id } },
+        { new: true },
+      )
+      .orFail();
+    return res.status(200).send({ data: userChat });
+  } catch (e) {
+    if (e instanceof mongoose.CastError) {
+      const castError = new Error(e.message);
+      castError.statusCode = HttpBadRequest;
+      return next(castError);
+    }
+    if (e instanceof mongoose.Error.DocumentNotFoundError) {
+      const notFoundError = new Error(e.message);
+      notFoundError.statusCode = HttpNotFound;
+      return next(notFoundError);
+    }
     return next(e);
   }
 };
