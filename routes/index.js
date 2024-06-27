@@ -30,7 +30,7 @@ router.post("/message", auth, userMessage);
 
 router.get("/message", getHistory);
 
-router.put("/message/:messageId", addMessageToChat);
+router.put("/message/:messageId", auth, addMessageToChat);
 // delete
 // router.delete("/message/:messageId", auth, deleteChat);
 

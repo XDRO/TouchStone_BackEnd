@@ -161,39 +161,38 @@ module.exports.getHistory = async (req, res, next) => {
   }
 };
 
+// Add delete items controller
+
 module.exports.addMessageToChat = async (req, res, next) => {
   try {
     const { messageId } = req.params;
+    const { message } = req.body;
+    console.log(message, "message object");
 
-    if (!messageId) {
-      console.log("messageId not found");
-      return next(new HttpBadRequest("messageId not found"));
+    const userChat = await chat.findById(messageId);
+    console.log(userChat, "userChat function");
+
+    if (userChat === null) {
+      console.log("chat not found", messageId);
+      return res.status(404).json({ message: "chat not found" });
     }
 
-    const userChat = await chat
-      .findByIdAndUpdate(
-        messageId,
-        { $addToSet: { messages: req.user._id } },
-        { new: true },
-      )
-      .orFail();
-    return res.status(200).send({ data: userChat });
+    const addMessage = await chat.findByIdAndUpdate(
+      userChat,
+      {
+        $addToSet: { messages: { message: message } },
+      },
+      { new: true },
+    );
+
+    console.log(addMessage, "add message");
+
+    return res.status(200).json({ addMessage });
   } catch (e) {
-    if (e instanceof mongoose.CastError) {
-      const castError = new Error(e.message);
-      castError.statusCode = HttpBadRequest;
-      return next(castError);
-    }
-    if (e instanceof mongoose.Error.DocumentNotFoundError) {
-      const notFoundError = new Error(e.message);
-      notFoundError.statusCode = HttpNotFound;
-      return next(notFoundError);
-    }
-    return next(e);
+    console.log(e, "error in adding message to chat");
+    return next(new HttpBadRequest(e.message, "error"));
   }
 };
-
-// Add delete items controller
 module.exports.deleteChat = async (req, res, next) => {
   try {
     const { messageId } = req.params;

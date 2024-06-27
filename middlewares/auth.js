@@ -13,6 +13,7 @@ module.exports = async (req, res, next) => {
 
   try {
     const payload = jwt.verify(token, JWT_SECRET);
+
     req.user = payload;
   } catch {
     return next(new HttpUnauthorized("Invalid token"));
