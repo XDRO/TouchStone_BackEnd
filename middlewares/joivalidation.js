@@ -79,6 +79,7 @@ module.exports.validateUserMessage = (req, res, next) => {
           .label("message")
           .messages({ "any.required": "'{#label}' field is required" }),
         chatType: Joi.string().label("message"),
+        chatId: Joi.string(),
       }),
     })(req, res, next);
   } catch (e) {

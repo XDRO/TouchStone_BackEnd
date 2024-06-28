@@ -12,7 +12,7 @@ const openai = new OpenAI({
 module.exports.userMessage = async (req, res, next) => {
   try {
     const owner = req.user._id;
-    const { text } = req.body;
+    const { text, chatId } = req.body;
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4",
@@ -24,29 +24,124 @@ module.exports.userMessage = async (req, res, next) => {
       ],
     });
 
-    const completionText = completion.choices[0].message.content;
+    const userChat = await chat.findById(chatId);
 
-    const newMessage = await chat.create({
-      owner,
+    const completionText = completion.choices[0].message.content;
+    if (chatId) {
+      const messageData = await chat.findByIdAndUpdate(
+        userChat,
+        {
+          $addToSet: { messages: { message: text, response: completionText } },
+        },
+        { new: true },
+      );
+
+      // return res.send(addMessage);
+      return res.status(200).json({ messageData });
+    } else {
+      const newMessage = await chat.create({
+        owner,
+        messages: [
+          {
+            message: text,
+            response: completionText,
+          },
+        ],
+      });
+
+      const messageData = {
+        _id: newMessage._id,
+        owner: newMessage.owner,
+        messages: newMessage.messages,
+        createdAt: newMessage.createdAt,
+      };
+
+      return res.status(200).json({ messageData });
+    }
+  } catch (e) {
+    return next(new HttpBadRequest(e.message));
+  }
+};
+
+// get the chat history down here
+module.exports.getHistory = async (req, res, next) => {
+  try {
+    const history = await chat.find({});
+    return res.status(200).send(history);
+  } catch (e) {
+    return next(e);
+  }
+};
+
+// Add delete items controller
+
+module.exports.addMessageToChat = async (req, res, next) => {
+  try {
+    const { messageId } = req.params;
+    const { message } = req.body;
+    console.log(message, "message object");
+
+    const userChat = await chat.findById(messageId);
+    console.log(userChat, "userChat function");
+
+    if (userChat === null) {
+      console.log("chat not found", messageId);
+      return res.status(404).json({ message: "chat not found" });
+    }
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4",
       messages: [
         {
-          message: text,
-          response: completionText,
+          role: "user",
+          content: message,
         },
       ],
     });
 
-    const messageData = {
-      _id: newMessage._id,
-      owner: newMessage.owner,
-      messages: newMessage.messages,
-      createdAt: newMessage.createdAt,
-      chatId: newMessage.chatId,
-    };
+    const completionText = completion.choices[0].message.content;
 
-    return res.send(messageData);
+    const addMessage = await chat.findByIdAndUpdate(
+      userChat,
+      {
+        $addToSet: { messages: { message: message, response: completionText } },
+      },
+      { new: true },
+    );
+
+    console.log(addMessage, "add message");
+
+    return res.status(200).json({ addMessage });
   } catch (e) {
-    return next(new HttpBadRequest(e.message));
+    console.log(e, "error in adding message to chat");
+    return next(new HttpBadRequest(e.message, "error"));
+  }
+};
+module.exports.deleteChat = async (req, res, next) => {
+  try {
+    const { messageId } = req.params;
+    const reqUser = req.user._id;
+    const userChat = await chat.findById(messageId);
+
+    if (userChat === null) {
+      return next(new HttpNotFound("chat not found"));
+    }
+
+    const { owner } = userChat;
+
+    if (!owner.equals(reqUser)) {
+      return next(new HttpUnauthorized("Not Authorized"));
+    }
+
+    await chat.deleteOne({ _id: messageId });
+
+    return res.status(200).json({ message: "Chat deleted" });
+  } catch (e) {
+    console.error(e);
+    if (e.name === "CastError") {
+      return next(new HttpBadRequest(e.message));
+    }
+    return next(e);
   }
 };
 
@@ -150,73 +245,3 @@ module.exports.userMessage = async (req, res, next) => {
 //     return next(e);
 //   }
 // };
-
-// get the chat history down here
-module.exports.getHistory = async (req, res, next) => {
-  try {
-    const history = await chat.find({});
-    return res.status(200).send(history);
-  } catch (e) {
-    return next(e);
-  }
-};
-
-// Add delete items controller
-
-module.exports.addMessageToChat = async (req, res, next) => {
-  try {
-    const { messageId } = req.params;
-    const { message } = req.body;
-    console.log(message, "message object");
-
-    const userChat = await chat.findById(messageId);
-    console.log(userChat, "userChat function");
-
-    if (userChat === null) {
-      console.log("chat not found", messageId);
-      return res.status(404).json({ message: "chat not found" });
-    }
-
-    const addMessage = await chat.findByIdAndUpdate(
-      userChat,
-      {
-        $addToSet: { messages: { message: message } },
-      },
-      { new: true },
-    );
-
-    console.log(addMessage, "add message");
-
-    return res.status(200).json({ addMessage });
-  } catch (e) {
-    console.log(e, "error in adding message to chat");
-    return next(new HttpBadRequest(e.message, "error"));
-  }
-};
-module.exports.deleteChat = async (req, res, next) => {
-  try {
-    const { messageId } = req.params;
-    const reqUser = req.user._id;
-    const userChat = await chat.findById(messageId);
-
-    if (userChat === null) {
-      return next(new HttpNotFound("chat not found"));
-    }
-
-    const { owner } = userChat;
-
-    if (!owner.equals(reqUser)) {
-      return next(new HttpUnauthorized("Not Authorized"));
-    }
-
-    await chat.deleteOne({ _id: messageId });
-
-    return res.status(200).json({ message: "Chat deleted" });
-  } catch (e) {
-    console.error(e);
-    if (e.name === "CastError") {
-      return next(new HttpBadRequest(e.message));
-    }
-    return next(e);
-  }
-};

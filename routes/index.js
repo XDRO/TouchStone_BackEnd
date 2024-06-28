@@ -26,7 +26,7 @@ router.post("/signin", validateUserLogin, login);
 router.get("/users/me", auth, getUser);
 
 // validateMessage removed from userMessage route
-router.post("/message", auth, userMessage);
+router.post("/message", auth, validateUserMessage, userMessage);
 
 router.get("/message", getHistory);
 
