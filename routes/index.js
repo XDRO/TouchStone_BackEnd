@@ -12,12 +12,7 @@ const {
 
 const { createUser, login, getUser } = require("../controllers/user");
 
-const {
-  userMessage,
-  getHistory,
-  deleteChat,
-  addMessageToChat,
-} = require("../controllers/chat");
+const { userMessage, getHistory, deleteChat } = require("../controllers/chat");
 
 router.post("/signup", validateNewUserInfo, createUser);
 
@@ -30,7 +25,7 @@ router.post("/message", auth, validateUserMessage, userMessage);
 
 router.get("/message", getHistory);
 
-router.put("/message/:messageId", auth, addMessageToChat);
+// router.put("/message/:messageId", auth, addMessageToChat);
 // delete
 // router.delete("/message/:messageId", auth, deleteChat);
 

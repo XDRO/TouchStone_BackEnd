@@ -75,48 +75,48 @@ module.exports.getHistory = async (req, res, next) => {
 
 // Add delete items controller
 
-module.exports.addMessageToChat = async (req, res, next) => {
-  try {
-    const { messageId } = req.params;
-    const { message } = req.body;
-    console.log(message, "message object");
+// module.exports.addMessageToChat = async (req, res, next) => {
+//   try {
+//     const { messageId } = req.params;
+//     const { message } = req.body;
+//     console.log(message, "message object");
 
-    const userChat = await chat.findById(messageId);
-    console.log(userChat, "userChat function");
+//     const userChat = await chat.findById(messageId);
+//     console.log(userChat, "userChat function");
 
-    if (userChat === null) {
-      console.log("chat not found", messageId);
-      return res.status(404).json({ message: "chat not found" });
-    }
+//     if (userChat === null) {
+//       console.log("chat not found", messageId);
+//       return res.status(404).json({ message: "chat not found" });
+//     }
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [
-        {
-          role: "user",
-          content: message,
-        },
-      ],
-    });
+//     const completion = await openai.chat.completions.create({
+//       model: "gpt-4",
+//       messages: [
+//         {
+//           role: "user",
+//           content: message,
+//         },
+//       ],
+//     });
 
-    const completionText = completion.choices[0].message.content;
+//     const completionText = completion.choices[0].message.content;
 
-    const addMessage = await chat.findByIdAndUpdate(
-      userChat,
-      {
-        $addToSet: { messages: { message: message, response: completionText } },
-      },
-      { new: true },
-    );
+//     const addMessage = await chat.findByIdAndUpdate(
+//       userChat,
+//       {
+//         $addToSet: { messages: { message: message, response: completionText } },
+//       },
+//       { new: true },
+//     );
 
-    console.log(addMessage, "add message");
+//     console.log(addMessage, "add message");
 
-    return res.status(200).json({ addMessage });
-  } catch (e) {
-    console.log(e, "error in adding message to chat");
-    return next(new HttpBadRequest(e.message, "error"));
-  }
-};
+//     return res.status(200).json({ addMessage });
+//   } catch (e) {
+//     console.log(e, "error in adding message to chat");
+//     return next(new HttpBadRequest(e.message, "error"));
+//   }
+// };
 module.exports.deleteChat = async (req, res, next) => {
   try {
     const { messageId } = req.params;
