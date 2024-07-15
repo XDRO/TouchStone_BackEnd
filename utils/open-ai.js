@@ -1,52 +1,52 @@
-const OpenAI = require("openai");
-const readlineSync = require("readline-sync");
-const colors = require("colors");
-require("dotenv").config();
+// const OpenAI = require("openai");
+// const readlineSync = require("readline-sync");
+// const colors = require("colors");
+// require("dotenv").config();
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// "openai": "node ./utils/open-ai.js" add this to package.json to run this in terminal
 
-async function chat(req, res, next) {
-  console.log(colors.bold.green(`Welcome to TouchStone, powered by openai`));
-  console.log(colors.bold.green(`Start a chat with TouchStone`));
+// const openai = new OpenAI({
+//   apiKey: process.env.OPENAI_API_KEY,
+// });
 
-  const chatHistory = []; // store
+// async function chat(req, res, next) {
 
-  while (true) {
-    const userInput = readlineSync.question(colors.yellow("You: "));
-    try {
-      // Construct messages by iterating over the history
-      const messages = chatHistory.map(([role, content]) => ({
-        role,
-        content,
-      }));
+//   const chatHistory = []; // store
 
-      // add lastest user input
-      messages.push({ role: "user", content: userInput });
+//   while (true) {
+//     const userInput = readlineSync.question(colors.yellow("You: "));
+//     try {
+//       // Construct messages by iterating over the history
+//       const messages = chatHistory.map(([role, content]) => ({
+//         role,
+//         content,
+//       }));
 
-      // call the API with the user input
-      const completion = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo-0125",
-        messages: messages,
-      });
+//       // add lastest user input
+//       messages.push({ role: "user", content: userInput });
 
-      // get complettion text/content
-      const completionText = completion.choices[0].message.content;
+//       // call the API with the user input
+//       const completion = await openai.chat.completions.create({
+//         model: "gpt-3.5-turbo-0125",
+//         messages: messages,
+//       });
 
-      if (userInput.toLowerCase() === "exit") {
-        return;
-      }
+//       // get complettion text/content
+//       const completionText = completion.choices[0].message.content;
 
-      console.log(colors.green("Bot: " + completionText));
+//       if (userInput.toLowerCase() === "exit") {
+//         return;
+//       }
 
-      // Update history with user input and assistant response
-      chatHistory.push(["user", userInput]);
-      chatHistory.push(["assistant", completionText]);
-    } catch (error) {
-      console.error(colors.red(error));
-    }
-  }
-}
+//       // console.log(colors.green("Bot: " + completionText));
 
-chat();
+//       // Update history with user input and assistant response
+//       chatHistory.push(["user", userInput]);
+//       chatHistory.push(["assistant", completionText]);
+//     } catch (error) {
+//       console.error(colors.red(error));
+//     }
+//   }
+// }
+
+// chat();

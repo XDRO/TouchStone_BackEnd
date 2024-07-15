@@ -2,7 +2,6 @@ const OpenAI = require("openai");
 const { HttpBadRequest } = require("../utils/err/httpbadrequest");
 const { HttpNotFound } = require("../utils/err/httpnotfound");
 const { HttpUnauthorized } = require("../utils/err/httpunauthorized");
-const mongoose = require("mongoose");
 const chat = require("../models/chat");
 
 const openai = new OpenAI({
@@ -38,26 +37,25 @@ module.exports.userMessage = async (req, res, next) => {
 
       // return res.send(addMessage);
       return res.status(200).json({ messageData });
-    } else {
-      const newMessage = await chat.create({
-        owner,
-        messages: [
-          {
-            message: text,
-            response: completionText,
-          },
-        ],
-      });
-
-      const messageData = {
-        _id: newMessage._id,
-        owner: newMessage.owner,
-        messages: newMessage.messages,
-        createdAt: newMessage.createdAt,
-      };
-
-      return res.status(200).json({ messageData });
     }
+    const newMessage = await chat.create({
+      owner,
+      messages: [
+        {
+          message: text,
+          response: completionText,
+        },
+      ],
+    });
+
+    const messageData = {
+      _id: newMessage._id,
+      owner: newMessage.owner,
+      messages: newMessage.messages,
+      createdAt: newMessage.createdAt,
+    };
+
+    return res.status(200).json({ messageData });
   } catch (e) {
     return next(new HttpBadRequest(e.message));
   }
@@ -137,7 +135,6 @@ module.exports.deleteChat = async (req, res, next) => {
 
     return res.status(200).json({ message: "Chat deleted" });
   } catch (e) {
-    console.error(e);
     if (e.name === "CastError") {
       return next(new HttpBadRequest(e.message));
     }

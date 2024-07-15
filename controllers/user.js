@@ -7,20 +7,19 @@ const user = require("../models/user");
 const { HttpBadRequest } = require("../utils/err/httpbadrequest");
 const { HttpNotFound } = require("../utils/err/httpnotfound");
 const { HttpConflict } = require("../utils/err/httpconflict");
-const { HttpUnauthorized } = require("../utils/err/httpunauthorized");
 
 const { JWT_SECRET } = require("../utils/config");
 
 module.exports.createUser = async (req, res, next) => {
   try {
-    const { name, email, password, confirm_password } = req.body;
+    const { name, email, password, confirmPassword } = req.body;
     const hash = bcrypt.hashSync(password, 10);
 
     const newUser = await user.create({
       name,
       email,
       password: hash,
-      confirm_password,
+      confirmPassword,
     });
 
     const resData = {

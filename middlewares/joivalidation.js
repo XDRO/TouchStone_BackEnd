@@ -20,14 +20,14 @@ module.exports.validateNewUserInfo = (req, res, next) => {
             "string.email": "Invalid '{#label}' ",
           }),
         password: Joi.string()
-          .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
+          .pattern(/^[a-zA-Z0-9]{3,30}$/)
           .required()
           .label("password")
           .messages({
             "any.required": " '{#label}' field is required",
             "string.pattern.base": "Invalid format for '{#label}' ",
           }),
-        confirm_password: Joi.string()
+        confirmPassword: Joi.string()
           .valid(Joi.ref("password"))
           .required()
           .label("confirm password")
@@ -38,7 +38,6 @@ module.exports.validateNewUserInfo = (req, res, next) => {
       }),
     })(req, res, next);
   } catch (e) {
-    console.log(e.details);
     next(e);
   }
 };
@@ -56,7 +55,7 @@ module.exports.validateUserLogin = (req, res, next) => {
             "string.email": "Invalid '{#label}' ",
           }),
         password: Joi.string()
-          .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
+          .pattern(/^[a-zA-Z0-9]{3,30}$/)
           .required()
           .label("password")
           .messages({
