@@ -71,8 +71,6 @@ module.exports.getHistory = async (req, res, next) => {
   }
 };
 
-// Add delete items controller
-
 // module.exports.addMessageToChat = async (req, res, next) => {
 //   try {
 //     const { messageId } = req.params;
