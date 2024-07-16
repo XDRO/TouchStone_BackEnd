@@ -1,7 +1,8 @@
 const OpenAI = require("openai");
 const { HttpBadRequest } = require("../utils/err/httpbadrequest");
 const { HttpNotFound } = require("../utils/err/httpnotfound");
-const { HttpUnauthorized } = require("../utils/err/httpunauthorized");
+// const { HttpUnauthorized } = require("../utils/err/httpunauthorized");
+const { HttpForbidden } = require("../utils/err/httpforbidden");
 const chat = require("../models/chat");
 
 const openai = new OpenAI({
@@ -57,7 +58,11 @@ module.exports.userMessage = async (req, res, next) => {
 
     return res.status(200).json({ messageData });
   } catch (e) {
-    return next(new HttpBadRequest(e.message));
+    if (e.name === "ValidationError") {
+      return next(new HttpBadRequest(e.message));
+    }
+
+    return next(e);
   }
 };
 
@@ -97,7 +102,7 @@ module.exports.deleteChat = async (req, res, next) => {
     const { owner } = userChat;
 
     if (!owner.equals(reqUser)) {
-      return next(new HttpUnauthorized("Not Authorized"));
+      return next(new HttpForbidden("Forbidden"));
     }
 
     await chat.deleteOne({ _id: messageId });
