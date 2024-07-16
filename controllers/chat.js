@@ -61,58 +61,29 @@ module.exports.userMessage = async (req, res, next) => {
   }
 };
 
-// get the chat history down here
 module.exports.getHistory = async (req, res, next) => {
   try {
-    const history = await chat.find({});
+    const { ownerId } = req.params;
+
+    if (!ownerId) {
+      return res.status(400).send({ error: "Owner ID is required" });
+    }
+
+    const reqUser = req.user._id;
+
+    if (reqUser.toString() !== ownerId) {
+      return res.status(403).send({ error: "Unauthorized" });
+    }
+
+    const history = await chat.find({ owner: ownerId });
+
     return res.status(200).send(history);
   } catch (e) {
+    // Pass errors to the next middleware for handling
     return next(e);
   }
 };
 
-// module.exports.addMessageToChat = async (req, res, next) => {
-//   try {
-//     const { messageId } = req.params;
-//     const { message } = req.body;
-//     console.log(message, "message object");
-
-//     const userChat = await chat.findById(messageId);
-//     console.log(userChat, "userChat function");
-
-//     if (userChat === null) {
-//       console.log("chat not found", messageId);
-//       return res.status(404).json({ message: "chat not found" });
-//     }
-
-//     const completion = await openai.chat.completions.create({
-//       model: "gpt-4",
-//       messages: [
-//         {
-//           role: "user",
-//           content: message,
-//         },
-//       ],
-//     });
-
-//     const completionText = completion.choices[0].message.content;
-
-//     const addMessage = await chat.findByIdAndUpdate(
-//       userChat,
-//       {
-//         $addToSet: { messages: { message: message, response: completionText } },
-//       },
-//       { new: true },
-//     );
-
-//     console.log(addMessage, "add message");
-
-//     return res.status(200).json({ addMessage });
-//   } catch (e) {
-//     console.log(e, "error in adding message to chat");
-//     return next(new HttpBadRequest(e.message, "error"));
-//   }
-// };
 module.exports.deleteChat = async (req, res, next) => {
   try {
     const { messageId } = req.params;
@@ -139,74 +110,6 @@ module.exports.deleteChat = async (req, res, next) => {
     return next(e);
   }
 };
-
-// module.exports.generateResponse = async (req, res, next) => {
-//   try {
-//     const owner = req.user._id;
-
-//     const lastestUserMessage = await chat.findOne({}).sort({ createdAt: -1 });
-
-//     if (!lastestUserMessage) {
-//       return next(new HttpNotFound("No user message found"));
-//     }
-
-//     const completion = await openai.chat.completions.create({
-//       model: "gpt-4o",
-//       messages: [
-//         {
-//           role: "user",
-//           content: lastestUserMessage.text,
-//         },
-//         {
-//           role: "assistant",
-//           content: "fake chatGpt response",
-//         },
-//       ],
-//     });
-
-//     const completionText = completion.choices[0].message.content;
-
-//     const newResponse = await chat.create({
-//       owner,
-//       text: completionText,
-//       chatType: "response",
-//       chatId: lastestUserMessage.chatId,
-//     });
-
-//     const responseData = {
-//       _id: newResponse._id,
-//       text: newResponse.text,
-//       owner: newResponse.owner,
-//       chatType: newResponse.chatType,
-//       createdAt: newResponse.createdAt,
-//       chatId: newResponse.chatId,
-//     };
-
-//     let ownerMatchFound = false;
-
-//     const eachMessage = await chat.find({});
-
-//     eachMessage.forEach((message) => {
-//       if (message.owner.equals(responseData.owner)) {
-//         ownerMatchFound = true;
-//       } else {
-//         return next(e);
-//       }
-//     });
-
-//     if (ownerMatchFound) {
-//       return res.send(responseData);
-//     }
-
-//     return next(e);
-//   } catch (e) {
-//     if (e.name === "ValidationError") {
-//       return next(new HttpBadRequest(e.message));
-//     }
-//     console.log("err at catch");
-//     return next(e);
-//   }
-// };
 
 // come back to later
 // this function will be used to summarize the users text, instead of using

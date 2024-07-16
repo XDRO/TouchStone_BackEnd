@@ -23,7 +23,7 @@ router.get("/users/me", auth, getUser);
 // validateMessage removed from userMessage route
 router.post("/message", auth, validateUserMessage, userMessage);
 
-router.get("/message", getHistory);
+router.get("/message/:ownerId", auth, getHistory);
 
 // router.put("/message/:messageId", auth, addMessageToChat);
 // delete
