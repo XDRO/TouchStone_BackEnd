@@ -12,6 +12,8 @@ const { globalErrorHandler } = require("./middlewares/error");
 
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 
+const rateLimiter = require("./middlewares/limiter");
+
 require("dotenv").config();
 
 const { PORT = 3001 } = process.env;
@@ -38,6 +40,8 @@ app.use(express.json());
 app.use(cors());
 
 app.use(requestLogger);
+
+app.use(rateLimiter);
 
 app.use(routes, require("./routes/index"));
 
