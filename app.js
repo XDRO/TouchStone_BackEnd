@@ -14,14 +14,17 @@ const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 const rateLimiter = require("./middlewares/limiter");
 
+const { DB_ADDRESS } = require("./utils/config");
+
 require("dotenv").config();
 
 const { PORT = 3001 } = process.env;
 
 const app = express();
 
+// address is harcoded, pass in .env file
 mongoose
-  .connect("mongodb://127.0.0.1:27017/Touch_Stone", {
+  .connect(DB_ADDRESS, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
