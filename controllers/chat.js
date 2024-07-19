@@ -68,19 +68,7 @@ module.exports.userMessage = async (req, res, next) => {
 
 module.exports.getHistory = async (req, res, next) => {
   try {
-    const { ownerId } = req.params;
-
-    if (!ownerId) {
-      return next(new HttpBadRequest("ownerId is required"));
-    }
-
-    const reqUser = req.user._id;
-
-    if (reqUser.toString() !== ownerId) {
-      return next(new HttpForbidden("Forbidden"));
-    }
-
-    const history = await chat.find({ owner: ownerId });
+    const history = await chat.find({ owner: req.user._id });
 
     return res.status(200).send(history);
   } catch (e) {
@@ -115,6 +103,19 @@ module.exports.deleteChat = async (req, res, next) => {
     return next(e);
   }
 };
+
+// removed from get history
+// const { ownerId } = req.params;
+
+// if (!ownerId) {
+//   return next(new HttpBadRequest("ownerId is required"));
+// }
+
+// const reqUser = req.user._id;
+
+// if (reqUser.toString() !== ownerId) {
+//   return next(new HttpForbidden("Forbidden"));
+// }
 
 // come back to later
 // this function will be used to summarize the users text, instead of using
