@@ -71,13 +71,13 @@ module.exports.getHistory = async (req, res, next) => {
     const { ownerId } = req.params;
 
     if (!ownerId) {
-      return res.status(400).send({ error: "Owner ID is required" });
+      return next(new HttpBadRequest("ownerId is required"));
     }
 
     const reqUser = req.user._id;
 
     if (reqUser.toString() !== ownerId) {
-      return res.status(403).send({ error: "Unauthorized" });
+      return next(new HttpForbidden("Forbidden"));
     }
 
     const history = await chat.find({ owner: ownerId });
