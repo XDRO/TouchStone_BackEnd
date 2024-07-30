@@ -1,5 +1,12 @@
 # TouchStone AI
 
+## Table of Contents
+
+- [Description](#description)
+- [Deployment and System Requirements](#deployment-and-system-requirements)
+- [Plans for Improvement](#plans-for-improvement)
+- [Link to Touchstone AI](#link-to-touchstone-ai)
+
 ## Description
 
 TouchStone AI is a sophisticated project developed during my time at TripleTen. It leverages OpenAI's GPT-4 model to create interactive and intelligent responses, providing a seamless experience for users. The backend architecture is designed with robust features and best practices:
