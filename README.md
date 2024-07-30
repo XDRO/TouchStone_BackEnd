@@ -50,7 +50,8 @@ To deploy TouchStone AI, ensure your system meets the following requirements:
 ## Plans for Improvement
 
 - **Speech-to-Text Integration**: Implementing speech-to-text controllers and functions to expand user interaction capabilities.
-- **Code Block Generation**: Enhancing user experience by generating code blocks upon request for programming-related queries.
+- **Code Block Generation**: Enhancing user experience by generating code blocks upon request for programming-related queries
+- **Update README.md**: Pictures, GIFs, or screenshots that detail the project features, A demo video of the project
 
 ## Link to Touchstone AI
 
